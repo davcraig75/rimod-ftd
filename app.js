@@ -137,17 +137,6 @@ var samples={json:samples_data,columns:samples_data.columns};
 //////////////////////////////////////////////////////////////////////////////////
 // Compile Javascript
 //////////////////////////////////////////////////////////////////////////////////
-    app.get(process.env.NODE_PRIVATE+'/compile', function(req, res) { 
-        res.render('wrapper.ejs', document, function(err,list){
-            fs.writeFile("'public/" + pjson.name+".js",list,function(err){
-                if(err)
-                    console.error(err);
-                res.send(list);
-                return ;
-            });
-            return ;
-        });
-    });
     if (process.argv[2] == "build") {
         app.render("wrapper.ejs", document, function(err, javascript) {
           fs.writeFile("public/" + pjson.name+".js", javascript, function(err) {
