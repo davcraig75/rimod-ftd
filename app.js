@@ -20,6 +20,7 @@ app.set("port", port);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 itgz = require("./src/lz-string.js");
+var app_name="rimod-ftd";
 var itg_comp = function(file) {
   return itgz.compressToEncodedURIComponent(fs.readFileSync(file, "utf8"));
 };
@@ -137,15 +138,21 @@ var samples={json:samples_data,columns:samples_data.columns};
 //////////////////////////////////////////////////////////////////////////////////
 // Compile Javascript
 //////////////////////////////////////////////////////////////////////////////////
-    if (process.argv[2] == "build") {
-        app.render("wrapper.ejs", document, function(err, javascript) {
-          fs.writeFile("public/" + pjson.name+".js", javascript, function(err) {
-            if (err) console.error(err);
-            //console.log("Built javascript");
-            process.exit();
-          });      
-        });
-      }   
+if (process.argv[2] == "build") {
+    app.render("wrapper.ejs", document, function(err, javascript) {
+      fs.writeFile("public/" + app_name + ".js", javascript, function(err) {
+        if (err) console.error(err);
+        console.log("Built javascript");
+        fs.writeFile(app_name  + ".js", javascript, function(err) {
+          if (err) console.error(err);
+          console.log("Built javascript");
+          process.exit();
+        });   
+      });
+   
+    });
+  }
+
 //////////////////////////////////////////////////////////////////////////////////
 // MongoDB API
 //////////////////////////////////////////////////////////////////////////////////
