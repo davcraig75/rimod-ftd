@@ -39,10 +39,6 @@ app.use(function(req, res, next) {
     next();
 }); 
 var max_range_10M = 10000000;
-var max_range_1M = 1000000;
-var max_range_100K = 100000;
-var max_range_10K = 10000;
-var max_range_1K = 1000;
 
 // Start server
 app.use(express.static(path.join(__dirname, 'public')));
@@ -51,7 +47,6 @@ app.use('/public',express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev')); // log every request to the console
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 /////////////////////////////////////////////////////////////////////////////////
 // Convert csv to json
@@ -166,103 +161,96 @@ var samples={json:samples_data,columns:samples_data.columns};
 // MongoDB API
 //////////////////////////////////////////////////////////////////////////////////
 var db = mongoose.connection;
-//var CoordSchema = mongoose.Schema({},{collection: "coord38" });
-//var CoordCollection =  db.model('coord38', CoordSchema);
-
 var GenePosSchema = mongoose.Schema({chr:String,first_pos:Number,last_pos:Number},{collection: "gene_summary"});   
 var Private_Gene_Schema = mongoose.Schema({chr:String,first_pos:Number,last_pos:Number},{collection: "gene_detail"});   
 var url = 'mongodb://localhost:'+process.env.MONGODB_PRIVATE_PORT+'/'+process.env.MONGODB_PRIVATE_DB;
-mongoose.connect(url, { useNewUrlParser: true });
-
-
- 
+mongoose.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true});
 
 //////////////////////////////////////////////////////////////////////////////////
 // GeneInfo API
 //////////////////////////////////////////////////////////////////////////////////
-    
-var GenePosCollection = db.model('gene_summary', GenePosSchema);
-function search_genepos(req, res) {
-    var chr=req.params.chr;
-    var first_pos=Math.round(req.params.first_pos);
-    var last_pos=Math.round(req.params.last_pos);
-    var startTime = Date.now();
-    var range=Math.abs(last_pos-first_pos);
-    if(range<max_range_10M) {   
-        GenePosCollection.find({"g38.0": { "$gte": first_pos,"$lte": last_pos },"summaries_BulkRNA":{"$exists":1} }, function(err, pos) {
-            if (err) { console.log ("error");res.json({})}
-            if (pos) {
-                res.json({genepos:encodeURI(itgz.compressToBase64(JSON.stringify(pos)))}); 
-            }
-        }).limit(500);
-    } else {
-            res.json([]); 
-    }       
-}
-app.get(process.env.NODE_PRIVATE+'/genePos/first_pos/:first_pos/last_pos/:last_pos',search_genepos); // Public
-
-
-var Private_Gene_Connection = db.model('gene_detail', Private_Gene_Schema);
-function private_search_gene(req, res) {
-    var mygene=req.params.gene;
-    Private_Gene_Connection.findOne({'gene':req.params.gene}, function(err, gene) {
-        if (err) { console.log('err'+err)}
-        if (gene) {
-            res.json({gene:encodeURI(itgz.compressToBase64(JSON.stringify(gene)))});
+  
+    var GenePosCollection = db.model('gene_summary', GenePosSchema);
+    function search_genepos(req, res) {
+        var chr=req.params.chr;
+        var first_pos=Math.round(req.params.first_pos);
+        var last_pos=Math.round(req.params.last_pos);
+        var startTime = Date.now();
+        var range=Math.abs(last_pos-first_pos);
+        if(range<max_range_10M) {   
+            GenePosCollection.find({"g38.0": { "$gte": first_pos,"$lte": last_pos },"summaries_BulkRNA":{"$exists":1} }, function(err, pos) {
+                if (err) { console.log ("error");res.json({})}
+                if (pos) {
+                    res.json({genepos:encodeURI(itgz.compressToBase64(JSON.stringify(pos)))}); 
+                }
+            }).limit(500);
         } else {
-            res.json({});
-        }
-    });
-}
-app.get(process.env.NODE_PRIVATE+'/gene/:gene', private_search_gene); 
+                res.json([]); 
+        }       
+    }
+    app.get(process.env.NODE_PRIVATE+'/genePos/first_pos/:first_pos/last_pos/:last_pos',search_genepos); // Public
 
 
+    var Private_Gene_Connection = db.model('gene_detail', Private_Gene_Schema);
+    function private_search_gene(req, res) {
+        var mygene=req.params.gene;
+        Private_Gene_Connection.findOne({'gene':req.params.gene}, function(err, gene) {
+            if (err) { console.log('err'+err)}
+            if (gene) {
+                res.json({gene:encodeURI(itgz.compressToBase64(JSON.stringify(gene)))});
+            } else {
+                res.json({});
+            }
+        });
+    }
+    app.get(process.env.NODE_PRIVATE+'/gene/:gene', private_search_gene); 
 
 //////////////////////////////////////////////////////////////////////////////////
 // METH
 //////////////////////////////////////////////////////////////////////////////////
-var methCollectionName="METHAR";
-var METHSchema = mongoose.Schema({},{collection: "METHAR" });
-var METHCollection = db.model("METHAR", METHSchema);
-function search_METH(req, res) {
-    var g0=Math.round(req.params.g0);
-    var g1=Math.round(req.params.g1);
-    var range=Math.abs(g1-g0);
-    var startTime = Date.now();
-    if(range<max_range_10M) {
-        METHCollection.aggregate([
-            {"$match":{"g0":{"$gt":g0,"$lt":g1}}},
-            {$unwind:"$samples"},
-            {$project:{"_id":0,"g0":1,"g1":"$g0","Full":"$samples.F","UID":"$samples.Sa","Pathology":"$samples.P","Disease":"$samples.D","Mutation":"$samples.M","Sex":"$samples.S","v0":"$samples.v0"}}
-        ], function(err, dat) {
-            if (err) { console.log ("error");res.json({});}        
-            if (dat) {
-                console.log('METHAR:\t',g1-g0,'c:\t',Object.keys(dat).length,',MS:\t', Date.now() - startTime);
-                res.json(dat); 
-            }
-        });
-    } else {res.json([]);}
-}   
-app.get(process.env.NODE_PRIVATE+'/meth/g0/:g0/g1/:g1',search_METH); // Public
+{
+    var methCollectionName="METHAR";
+    var METHSchema = mongoose.Schema({},{collection: "METHAR" });
+    var METHCollection = db.model("METHAR", METHSchema);
+    function search_METH(req, res) {
+        var g0=Math.round(req.params.g0);
+        var g1=Math.round(req.params.g1);
+        var range=Math.abs(g1-g0);
+        var startTime = Date.now();
+        if(range<max_range_10M) {
+            METHCollection.aggregate([
+                {"$match":{"g0":{"$gt":g0,"$lt":g1}}},
+                {$unwind:"$samples"},
+                {$project:{"_id":0,"g0":1,"g1":"$g0","Full":"$samples.F","UID":"$samples.Sa","Pathology":"$samples.P","Disease":"$samples.D","Mutation":"$samples.M","Sex":"$samples.S","v0":"$samples.v0"}}
+            ], function(err, dat) {
+                if (err) { console.log ("error");res.json({});}        
+                if (dat) {
+                    console.log('METHAR:\t',g1-g0,'c:\t',Object.keys(dat).length,',MS:\t', Date.now() - startTime);
+                    res.json(dat); 
+                }
+            });
+        } else {res.json([]);}
+    }   
+    app.get(process.env.NODE_PRIVATE+'/meth/g0/:g0/g1/:g1',search_METH); // Public
 
-function search_METH_summary(req, res) {
-    var g0=Math.round(req.params.g0);var g1=Math.round(req.params.g1);var range=Math.abs(g1-g0);var startTime = Date.now();
-    if(range<max_range_10M) {
-        METHCollection.aggregate([
-            {"$match":{"g0":{"$gt":g0,"$lt":g1}}},{$unwind:"$summaries"},
-            {$project:{"_id":0,"g0":1,"g1":"$g0","min":"$summaries.min","q1":"$summaries.q1","median":"$summaries.median","q3":"$summaries.q3","event":"$summaries.event","variable":"$summaries.variable","max":"$summaries.max","n":"$summaries.n"}}
-        ], function(err, dat) {
-            if (err) { console.log ("error");res.json({});}        
-            if (dat) {
-                
-                console.log('METHSUMMARY:\t',g1,g0,'c:\t',Object.keys(dat).length,',MS:\t', Date.now() - startTime);
-                res.json(dat); 
-            }
-        });
-    } else {res.json([]);}
-}   
-app.get(process.env.NODE_PRIVATE+'/meth_summary/g0/:g0/g1/:g1',search_METH_summary); // Public
-
+    function search_METH_summary(req, res) {
+        var g0=Math.round(req.params.g0);var g1=Math.round(req.params.g1);var range=Math.abs(g1-g0);var startTime = Date.now();
+        if(range<max_range_10M) {
+            METHCollection.aggregate([
+                {"$match":{"g0":{"$gt":g0,"$lt":g1}}},{$unwind:"$summaries"},
+                {$project:{"_id":0,"g0":1,"g1":"$g0","min":"$summaries.min","q1":"$summaries.q1","median":"$summaries.median","q3":"$summaries.q3","event":"$summaries.event","variable":"$summaries.variable","max":"$summaries.max","n":"$summaries.n"}}
+            ], function(err, dat) {
+                if (err) { console.log ("error");res.json({});}        
+                if (dat) {
+                    
+                    console.log('METHSUMMARY:\t',g1,g0,'c:\t',Object.keys(dat).length,',MS:\t', Date.now() - startTime);
+                    res.json(dat); 
+                }
+            });
+        } else {res.json([]);}
+    }   
+    app.get(process.env.NODE_PRIVATE+'/meth_summary/g0/:g0/g1/:g1',search_METH_summary); // Public
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 // CAGE API
