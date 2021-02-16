@@ -1,0 +1,121 @@
+UID	Assay	Assay Name	Sample	Age	Sex	Disease	Mutation	PMD min	Gene	Pathology	FTD_Status	pH
+rimod1_BulkRNA	BulkRNA	BulkRNA	rimod1	83	Female	control		363	Control	Control	control	6.6
+rimod1_METHAR	METHAR	METHAR	rimod1	83	Female	control		363	Control	Control	control	6.6
+rimod12_BulkRNA	BulkRNA	BulkRNA	rimod12	85	Female	control		425	Control	Control	control	
+rimod12_METHAR	METHAR	METHAR	rimod12	85	Female	control		425	Control	Control	control	
+rimod13_BulkRNA	BulkRNA	BulkRNA	rimod13	67	Female	FTD:GRN	Ser82ValfsX174)	255	GRN	GRN	FTD	6.2
+rimod13_METHAR	METHAR	METHAR	rimod13	67	Female	FTD:GRN	Ser82ValfsX174)	255	GRN	GRN	FTD	6.2
+rimod14_BulkRNA	BulkRNA	BulkRNA	rimod14	70	Female	FTD:sporadic:TDP		415	Sporadic	TDP	FTD	6.6
+rimod2_BulkRNA	BulkRNA	BulkRNA	rimod2	69	Female	FTD:GRN	Gly125X	325	GRN	GRN	FTD	6.44
+rimod2_METHAR	METHAR	METHAR	rimod2	69	Female	FTD:GRN	Gly125X	325	GRN	GRN	FTD	6.44
+rimod20_BulkRNA	BulkRNA	BulkRNA	rimod20	67	Female	FTD:C9	C9orf72	144	C9	C9	FTD	
+rimod21_BulkRNA	BulkRNA	BulkRNA	rimod21	75	Female	FTD:sporadic:TDP		315	Sporadic	TDP	FTD	6.11
+rimod21_METHAR	METHAR	METHAR	rimod21	75	Female	FTD:sporadic:TDP		315	Sporadic	TDP	FTD	6.11
+rimod22_BulkRNA	BulkRNA	BulkRNA	rimod22	64	Female	FTD:MAPT	P301L	450	MAPT	MAPT	FTD	5.91
+rimod22_METHAR	METHAR	METHAR	rimod22	64	Female	FTD:MAPT	P301L	450	MAPT	MAPT	FTD	5.91
+rimod24_BulkRNA	BulkRNA	BulkRNA	rimod24	52	Female	FTD:GRN	Ser82ValfsX174)	230	GRN	GRN	FTD	6.48
+rimod24_METHAR	METHAR	METHAR	rimod24	52	Female	FTD:GRN	Ser82ValfsX174)	230	GRN	GRN	FTD	6.48
+rimod29_BulkRNA	BulkRNA	BulkRNA	rimod29	76	Female	FTD:GRN	Ser82ValfsX174)	215	GRN	GRN	FTD	6.1
+rimod29_METHAR	METHAR	METHAR	rimod29	76	Female	FTD:GRN	Ser82ValfsX174)	215	GRN	GRN	FTD	6.1
+rimod30_BulkRNA	BulkRNA	BulkRNA	rimod30	60	Female	control		450	Control	Control	control	6.8
+rimod30_METHAR	METHAR	METHAR	rimod30	60	Female	control		450	Control	Control	control	6.8
+rimod31_BulkRNA	BulkRNA	BulkRNA	rimod31	66	Female	FTD:GRN	Gly300X	315	GRN	GRN	FTD	6.45
+rimod31_METHAR	METHAR	METHAR	rimod31	66	Female	FTD:GRN	Gly300X	315	GRN	GRN	FTD	6.45
+rimod32_BulkRNA	BulkRNA	BulkRNA	rimod32	76	Female	control		435	Control	Control	control	6.87
+rimod32_METHAR	METHAR	METHAR	rimod32	76	Female	control		435	Control	Control	control	6.87
+rimod33_BulkRNA	BulkRNA	BulkRNA	rimod33	67	Female	FTD:C9	C9orf72	405	C9	C9	FTD	6.29
+rimod33_METHAR	METHAR	METHAR	rimod33	67	Female	FTD:C9	C9orf72	405	C9	C9	FTD	6.29
+rimod34_BulkRNA	BulkRNA	BulkRNA	rimod34	54	Female	FTD:MAPT	G272V	450	MAPT	MAPT	FTD	6.46
+rimod34_METHAR	METHAR	METHAR	rimod34	54	Female	FTD:MAPT	G272V	450	MAPT	MAPT	FTD	6.46
+rimod35_BulkRNA	BulkRNA	BulkRNA	rimod35	70	Female	FTD:C9	C9orf72	280	C9	C9	FTD	6.64
+rimod35_METHAR	METHAR	METHAR	rimod35	70	Female	FTD:C9	C9orf72	280	C9	C9	FTD	6.64
+rimod36_BulkRNA	BulkRNA	BulkRNA	rimod36	84	Female	control		336	Control	Control	control	6.68
+rimod36_METHAR	METHAR	METHAR	rimod36	84	Female	control		336	Control	Control	control	6.68
+rimod38_BulkRNA	BulkRNA	BulkRNA	rimod38	64	Female	FTD:C9	C9orf72	545	C9	C9	FTD	6.23
+rimod38_METHAR	METHAR	METHAR	rimod38	64	Female	FTD:C9	C9orf72	545	C9	C9	FTD	6.23
+rimod39_BulkRNA	BulkRNA	BulkRNA	rimod39	59	Female	FTD:C9	C9orf72	720	C9	C9	FTD	
+rimod39_METHAR	METHAR	METHAR	rimod39	59	Female	FTD:C9	C9orf72	720	C9	C9	FTD	
+rimod40_BulkRNA	BulkRNA	BulkRNA	rimod40	74	Female	FTD:C9	C9orf72	310	C9	C9	FTD	6.15
+rimod40_METHAR	METHAR	METHAR	rimod40	74	Female	FTD:C9	C9orf72	310	C9	C9	FTD	6.15
+rimod42_BulkRNA	BulkRNA	BulkRNA	rimod42	68	Female	FTD:C9	C9orf72	410	C9	C9	FTD	6.77
+rimod42_METHAR	METHAR	METHAR	rimod42	68	Female	FTD:C9	C9orf72	410	C9	C9	FTD	6.77
+rimod43_BulkRNA	BulkRNA	BulkRNA	rimod43	66	Female	FTD:MAPT	P301L	400	MAPT	MAPT	FTD	6.52
+rimod43_METHAR	METHAR	METHAR	rimod43	66	Female	FTD:MAPT	P301L	400	MAPT	MAPT	FTD	6.52
+rimod44_BulkRNA	BulkRNA	BulkRNA	rimod44	75	Female	control		325	Control	Control	control	6.75
+rimod44_METHAR	METHAR	METHAR	rimod44	75	Female	control		325	Control	Control	control	6.75
+rimod49_BulkRNA	BulkRNA	BulkRNA	rimod49	74	Female	FTD:GRN		720	GRN	GRN	FTD	
+rimod51_BulkRNA	BulkRNA	BulkRNA	rimod51	89	Female	control		370	Control	Control	control	6.36
+rimod52_BulkRNA	BulkRNA	BulkRNA	rimod52	89	Female	control		340	Control	Control	control	6.75
+rimod52_METHAR	METHAR	METHAR	rimod52	89	Female	control		340	Control	Control	control	6.75
+rimod53_BulkRNA	BulkRNA	BulkRNA	rimod53	72	Female	FTD:C9	C9orf72	290	C9	C9	FTD	6.25
+rimod53_METHAR	METHAR	METHAR	rimod53	72	Female	FTD:C9	C9orf72	290	C9	C9	FTD	6.25
+rimod55_BulkRNA	BulkRNA	BulkRNA	rimod55	63	Female	FTD:MAPT	L315R	255	MAPT	MAPT	FTD	6.36
+rimod57_BulkRNA	BulkRNA	BulkRNA	rimod57	42	Female	FTD:C9	C9orf72	345	C9	C9	FTD	6.93
+rimod57_METHAR	METHAR	METHAR	rimod57	42	Female	FTD:C9	C9orf72	345	C9	C9	FTD	6.93
+rimod59_BulkRNA	BulkRNA	BulkRNA	rimod59	75	Female	FTD:MAPT	R406V	445	MAPT	MAPT	FTD	6.6
+rimod59_METHAR	METHAR	METHAR	rimod59	75	Female	FTD:MAPT	R406V	445	MAPT	MAPT	FTD	6.6
+rimod61_BulkRNA	BulkRNA	BulkRNA	rimod61	63	Female	FTD:MAPT	G272V	250	MAPT	MAPT	FTD	6.64
+rimod61_METHAR	METHAR	METHAR	rimod61	63	Female	FTD:MAPT	G272V	250	MAPT	MAPT	FTD	6.64
+rimod62_BulkRNA	BulkRNA	BulkRNA	rimod62	68	Female	FTD:MAPT	L315R	340	MAPT	MAPT	FTD	6.6
+rimod62_METHAR	METHAR	METHAR	rimod62	68	Female	FTD:MAPT	L315R	340	MAPT	MAPT	FTD	6.6
+rimod65_BulkRNA	BulkRNA	BulkRNA	rimod65	84	Female	control		355	Control	Control	control	6.1
+rimod65_METHAR	METHAR	METHAR	rimod65	84	Female	control		355	Control	Control	control	6.1
+rimod66_BulkRNA	BulkRNA	BulkRNA	rimod66	52	Female	FTD:GRN			GRN	GRN	FTD	
+rimod67_BulkRNA	BulkRNA	BulkRNA	rimod67	76	Female	FTD:MAPT	P301L	380	MAPT	MAPT	FTD	
+rimod70_BulkRNA	BulkRNA	BulkRNA	rimod70	64	Female	FTD:MAPT	P301L	310	MAPT	MAPT	FTD	6.4
+rimod71_BulkRNA	BulkRNA	BulkRNA	rimod71	87	Female	control		420	Control	Control	control	6.92
+rimod71_METHAR	METHAR	METHAR	rimod71	87	Female	control		420	Control	Control	control	6.92
+rimod8_BulkRNA	BulkRNA	BulkRNA	rimod8	62	Female	FTD:C9	C9orf72	72	C9	C9	FTD	
+rimod10_BulkRNA	BulkRNA	BulkRNA	rimod10	41	Male	FTD:C9	C9orf72_homozygote	475.2	C9	C9	FTD	
+rimod11_BulkRNA	BulkRNA	BulkRNA	rimod11	60	Male	FTD:C9	C9orf72	305	C9	C9	FTD	6.28
+rimod11_METHAR	METHAR	METHAR	rimod11	60	Male	FTD:C9	C9orf72	305	C9	C9	FTD	6.28
+rimod15_BulkRNA	BulkRNA	BulkRNA	rimod15	64	Male	FTD:C9	C9orf72	275	C9	C9	FTD	6.25
+rimod15_METHAR	METHAR	METHAR	rimod15	64	Male	FTD:C9	C9orf72	275	C9	C9	FTD	6.25
+rimod16_BulkRNA	BulkRNA	BulkRNA	rimod16	83	Male	control		345	Control	Control	control	6.35
+rimod16_METHAR	METHAR	METHAR	rimod16	83	Male	control		345	Control	Control	control	6.35
+rimod17_BulkRNA	BulkRNA	BulkRNA	rimod17	73	Male	FTD:sporadic:TDP		335	Sporadic	TDP	FTD	6.8
+rimod18_BulkRNA	BulkRNA	BulkRNA	rimod18	66	Male	FTD:MAPT	P301L	300	MAPT	MAPT	FTD	6.3
+rimod18_METHAR	METHAR	METHAR	rimod18	66	Male	FTD:MAPT	P301L	300	MAPT	MAPT	FTD	6.3
+rimod19_BulkRNA	BulkRNA	BulkRNA	rimod19	91	Male	control		480	Control	Control	control	6.26
+rimod19_METHAR	METHAR	METHAR	rimod19	91	Male	control		480	Control	Control	control	6.26
+rimod23_BulkRNA	BulkRNA	BulkRNA	rimod23	60	Male	FTD:C9	C9orf72	288	C9	C9	FTD	
+rimod25_BulkRNA	BulkRNA	BulkRNA	rimod25	68	Male	FTD:C9	C9orf72	260	C9	C9	FTD	6.25
+rimod25_METHAR	METHAR	METHAR	rimod25	68	Male	FTD:C9	C9orf72	260	C9	C9	FTD	6.25
+rimod26_BulkRNA	BulkRNA	BulkRNA	rimod26	75	Male	FTD:sporadic:TDP		385	Sporadic	TDP	FTD	6.2
+rimod27_BulkRNA	BulkRNA	BulkRNA	rimod27	58	Male	FTD:C9	C9orf72	330	C9	C9	FTD	6.66
+rimod27_METHAR	METHAR	METHAR	rimod27	58	Male	FTD:C9	C9orf72	330	C9	C9	FTD	6.66
+rimod28_BulkRNA	BulkRNA	BulkRNA	rimod28	63	Male	FTD:GRN		365	GRN	GRN	FTD	6.27
+rimod28_METHAR	METHAR	METHAR	rimod28	63	Male	FTD:GRN		365	GRN	GRN	FTD	6.27
+rimod3_BulkRNA	BulkRNA	BulkRNA	rimod3	63	Male	FTD:C9	C9orf72	285	C9	C9	FTD	6.45
+rimod3_METHAR	METHAR	METHAR	rimod3	63	Male	FTD:C9	C9orf72	285	C9	C9	FTD	6.45
+rimod37_BulkRNA	BulkRNA	BulkRNA	rimod37	49	Male	FTD:MAPT	G272V	310	MAPT	MAPT	FTD	6.54
+rimod37_METHAR	METHAR	METHAR	rimod37	49	Male	FTD:MAPT	G272V	310	MAPT	MAPT	FTD	6.54
+rimod4_BulkRNA	BulkRNA	BulkRNA	rimod4	80	Male	FTD:sporadic:TDP		325	Sporadic	TDP	FTD	6.48
+rimod41_BulkRNA	BulkRNA	BulkRNA	rimod41	59	Male	FTD:GRN		285	0	GRN	FTD	6.52
+rimod41_METHAR	METHAR	METHAR	rimod41	59	Male	FTD:GRN		285	0	GRN	FTD	6.52
+rimod45_BulkRNA	BulkRNA	BulkRNA	rimod45	74	Male	FTD:sporadic:TDP:MND		270	Sporadic	TDP_MND	FTD	6.44
+rimod46_BulkRNA	BulkRNA	BulkRNA	rimod46	59	Male	FTD:sporadic:TDP:MND		480	Sporadic	TDP_MND	FTD	6.24
+rimod47_BulkRNA	BulkRNA	BulkRNA	rimod47	51	Male	FTD:MAPT	G272V	265	MAPT	MAPT	FTD	6.1
+rimod47_METHAR	METHAR	METHAR	rimod47	51	Male	FTD:MAPT	G272V	265	MAPT	MAPT	FTD	6.1
+rimod48_BulkRNA	BulkRNA	BulkRNA	rimod48	49	Male	control		375	Control	Control	control	6.23
+rimod48_METHAR	METHAR	METHAR	rimod48	49	Male	control		375	Control	Control	control	6.23
+rimod5_BulkRNA	BulkRNA	BulkRNA	rimod5	46	Male	FTD:MAPT	P301L	335	MAPT	MAPT	FTD	6.48
+rimod50_BulkRNA	BulkRNA	BulkRNA	rimod50	63	Male	Sporadic:TDP		455	Sporadic	TDP	Sporadic	6.77
+rimod54_BulkRNA	BulkRNA	BulkRNA	rimod54	64	Male	FTD:MAPT	P301L	385	MAPT	MAPT	FTD	6.38
+rimod54_METHAR	METHAR	METHAR	rimod54	64	Male	FTD:MAPT	P301L	385	MAPT	MAPT	FTD	6.38
+rimod56_BulkRNA	BulkRNA	BulkRNA	rimod56	88	Male	control		340	Control	Control	control	7.3
+rimod58_BulkRNA	BulkRNA	BulkRNA	rimod58	60	Male	FTD:MAPT	P301L	323	MAPT	MAPT	FTD	6.3
+rimod58_METHAR	METHAR	METHAR	rimod58	60	Male	FTD:MAPT	P301L	323	MAPT	MAPT	FTD	6.3
+rimod6_BulkRNA	BulkRNA	BulkRNA	rimod6	49	Male	FTD:sporadic:tauopathy		295	Sporadic	Taupathy	FTD	6.37
+rimod60_BulkRNA	BulkRNA	BulkRNA	rimod60	60	Male	FTD:MAPT	P301L	280	MAPT	MAPT	FTD	6.45
+rimod60_METHAR	METHAR	METHAR	rimod60	60	Male	FTD:MAPT	P301L	280	MAPT	MAPT	FTD	6.45
+rimod63_BulkRNA	BulkRNA	BulkRNA	rimod63	60	Male	FTD:sporadic		365	Sporadic	Sporadic	FTD	6.47
+rimod64_BulkRNA	BulkRNA	BulkRNA	rimod64	70	Male	control		215	Control	Control	control	7.2
+rimod64_METHAR	METHAR	METHAR	rimod64	70	Male	control		215	Control	Control	control	7.2
+rimod68_BulkRNA	BulkRNA	BulkRNA	rimod68	52	Male	FTD:MAPT	P301L	690	MAPT	MAPT	FTD	
+rimod68_METHAR	METHAR	METHAR	rimod68	52	Male	FTD:MAPT	P301L	690	MAPT	MAPT	FTD	
+rimod69_BulkRNA	BulkRNA	BulkRNA	rimod69	58	Male			410				6.9
+rimod7_BulkRNA	BulkRNA	BulkRNA	rimod7	82	Male	control		350	Control	Control	control	6.57
+rimod7_METHAR	METHAR	METHAR	rimod7	82	Male	control		350	Control	Control	control	6.57
+rimod72_BulkRNA	BulkRNA	BulkRNA	rimod72	58	Male	FTD:GRN	Ser82ValfsX174)	360	GRN	GRN	FTD	6.19
+rimod9_BulkRNA	BulkRNA	BulkRNA	rimod9	61	Male	FTD:GRN		504	GRN	GRN	FTD	

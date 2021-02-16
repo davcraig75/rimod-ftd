@@ -1,0 +1,73 @@
+Sample_UID	Age	Gender	Disease	Mutation	PMD min	pH
+rimod8	62	F	FTD:C9	C9orf72	72	
+rimod20	67	F	FTD:C9	C9orf72	144	
+rimod25	68	M	FTD:C9	C9orf72	260	6.25
+rimod15	64	M	FTD:C9	C9orf72	275	6.25
+rimod35	70	F	FTD:C9	C9orf72	280	6.64
+rimod3	63	M	FTD:C9	C9orf72	285	6.45
+rimod23	60	M	FTD:C9	C9orf72	288	
+rimod53	72	F	FTD:C9	C9orf72	290	6.25
+rimod11	60	M	FTD:C9	C9orf72	305	6.28
+rimod40	74	F	FTD:C9	C9orf72	310	6.15
+rimod27	58	M	FTD:C9	C9orf72	330	6.66
+rimod57	42	F	FTD:C9	C9orf72	345	6.93
+rimod33	67	F	FTD:C9	C9orf72	405	6.29
+rimod42	68	F	FTD:C9	C9orf72	410	6.77
+rimod38	64	F	FTD:C9	C9orf72	545	6.23
+rimod39	59	F	FTD:C9	C9orf72	720	
+rimod10	41	M	FTD:C9	C9orf72_homozygote	475.2	
+rimod61	63	F	FTD:MAPT	G272V	250	6.64
+rimod47	51	M	FTD:MAPT	G272V	265	6.1
+rimod37	49	M	FTD:MAPT	G272V	310	6.54
+rimod34	54	F	FTD:MAPT	G272V	450	6.46
+rimod2	69	F	FTD:GRN	Gly125X	325	6.44
+rimod31	66	F	FTD:GRN	Gly300X	315	6.45
+rimod55	63	F	FTD:MAPT	L315R	255	6.36
+rimod62	68	F	FTD:MAPT	L315R	340	6.6
+rimod64	70	M	control		215	7.2
+rimod45	74	M	FTD:sporadic:TDP:MND		270	6.44
+rimod41	59	M	FTD:GRN		285	6.52
+rimod6	49	M	FTD:sporadic:tauopathy		295	6.37
+rimod21	75	F	FTD:sporadic:TDP		315	6.11
+rimod4	80	M	FTD:sporadic:TDP		325	6.48
+rimod44	75	F	control		325	6.75
+rimod17	73	M	FTD:sporadic:TDP		335	6.8
+rimod36	84	F	control		336	6.68
+rimod52	89	F	control		340	6.75
+rimod56	88	M	control		340	7.3
+rimod16	83	M	control		345	6.35
+rimod7	82	M	control		350	6.57
+rimod65	84	F	control		355	6.1
+rimod1	83	F	control		363	6.6
+rimod28	63	M	FTD:GRN		365	6.27
+rimod63	60	M	FTD:sporadic		365	6.47
+rimod51	89	F	control		370	6.36
+rimod48	49	M	control		375	6.23
+rimod26	75	M	FTD:sporadic:TDP		385	6.2
+rimod69	58	M	NA:		410	6.9
+rimod14	70	F	FTD:sporadic:TDP		415	6.6
+rimod71	87	F	control		420	6.92
+rimod12	85	F	control		425	
+rimod32	76	F	control		435	6.87
+rimod30	60	F	control		450	6.8
+rimod50	63	M	Sporadic:TDP		455	6.77
+rimod46	59	M	FTD:sporadic:TDP:MND		480	6.24
+rimod19	91	M	control		480	6.26
+rimod9	61	M	FTD:GRN		504	
+rimod49	74	F	FTD:GRN		720	
+rimod66	52	F	FTD:GRN			
+rimod60	60	M	FTD:MAPT	P301L	280	6.45
+rimod18	66	M	FTD:MAPT	P301L	300	6.3
+rimod70	64	F	FTD:MAPT	P301L	310	6.4
+rimod58	60	M	FTD:MAPT	P301L	323	6.3
+rimod5	46	M	FTD:MAPT	P301L	335	6.48
+rimod67	76	F	FTD:MAPT	P301L	380	
+rimod54	64	M	FTD:MAPT	P301L	385	6.38
+rimod43	66	F	FTD:MAPT	P301L	400	6.52
+rimod22	64	F	FTD:MAPT	P301L	450	5.91
+rimod68	52	M	FTD:MAPT	P301L	690	
+rimod59	75	F	FTD:MAPT	R406V	445	6.6
+rimod29	76	F	FTD:GRN	Ser82ValfsX174)	215	6.1
+rimod24	52	F	FTD:GRN	Ser82ValfsX174)	230	6.48
+rimod13	67	F	FTD:GRN	Ser82ValfsX174)	255	6.2
+rimod72	58	M	FTD:GRN	Ser82ValfsX174)	360	6.19

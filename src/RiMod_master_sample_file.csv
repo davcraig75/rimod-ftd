@@ -1,0 +1,62 @@
+Sample,Age,Sex,Disease,Pathology,Disease-Gene,Gene,Mutation,Min pmd,pH
+rimod27,58,Male,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,330,6.66
+rimod38,64,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,545,6.23
+rimod11,60,Male,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,305,6.28
+rimod39,59,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,720,
+rimod40,74,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,310,6.15
+rimod35,70,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,280,6.64
+rimod33,67,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,405,6.29
+rimod15,64,Male,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,275,6.25
+rimod3,63,Male,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,285,6.45
+rimod53,72,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,290,6.25
+rimod57,42,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,345,6.93
+rimod42,68,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,410,6.77
+rimod25,68,Male,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,260,6.25
+rimod20,67,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,144,
+rimod10,41,Male,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion (Hom),475.2,
+rimod8,62,Female,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,72,
+rimod23,60,Male,FTD,TDP,FTD.C9 (C9ORF72),C9ORF72,C9orf72 Expansion,288,
+rimod66,52,Female,FTD,TDP,FTD.GRN,GRN,--,,
+rimod31,66,Female,FTD,TDP,FTD.GRN,GRN,GRN(Gly300X),315,6.45
+rimod28,63,Male,FTD,TDP,FTD.GRN,GRN,--,365,6.27
+rimod29,76,Female,FTD,TDP,FTD.GRN,GRN,GRN(Ser82ValfsX174),215,6.1
+rimod24,52,Female,FTD,TDP,FTD.GRN,GRN,GRN(Ser82ValfsX174),230,6.48
+rimod2,69,Female,FTD,TDP,FTD.GRN,GRN,GRN(Gly125X),325,6.44
+rimod72,58,Male,FTD,TDP,FTD.GRN,GRN,GRN(Ser82ValfsX174),360,6.19
+rimod13,67,Female,FTD,TDP,FTD.GRN,GRN,GRN(Ser82ValfsX174),255,6.2
+rimod9,61,Male,FTD,TDP,FTD.GRN,GRN,--,504,
+rimod41,59,Male,FTD,TDP,FTD.GRN,GRN,--,285,6.52
+rimod49,74,Female,FTD,TDP,FTD.GRN,GRN,--,720,
+rimod18,66,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),300,6.3
+rimod55,63,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(L315R),255,6.36
+rimod61,63,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(G272V),250,6.64
+rimod59,75,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(R406V),445,6.6
+rimod5,46,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),335,6.48
+rimod43,66,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),400,6.52
+rimod34,54,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(G272V),450,6.46
+rimod37,49,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(G272V),310,6.54
+rimod62,68,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(L315R),340,6.6
+rimod68,52,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),690,
+rimod47,51,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(G272V),265,6.1
+rimod58,60,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),323,6.3
+rimod22,64,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),450,5.91
+rimod54,64,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),385,6.38
+rimod60,60,Male,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),280,6.45
+rimod70,64,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),310,6.4
+rimod67,76,Female,FTD,Tau,FTD.MAPT,MAPT,MAPT(P301L),380,
+rimod19,91,Male,Control,Control,Control,Control,Control,480,6.26
+rimod30,60,Female,Control,Control,Control,Control,Control,450,6.8
+rimod51,89,Female,Control,Control,Control,Control,Control,370,6.36
+rimod64,70,Male,Control,Control,Control,Control,Control,215,7.2
+rimod16,83,Male,Control,Control,Control,Control,Control,345,6.35
+rimod12,85,Female,Control,Control,Control,Control,Control,425,
+rimod7,82,Male,Control,Control,Control,Control,Control,350,6.57
+rimod48,49,Male,Control,Control,Control,Control,Control,375,6.23
+rimod71,87,Female,Control,Control,Control,Control,Control,420,6.92
+rimod32,76,Female,Control,Control,Control,Control,Control,435,6.87
+rimod44,75,Female,Control,Control,Control,Control,Control,325,6.75
+rimod65,84,Female,Control,Control,Control,Control,Control,355,6.1
+rimod52,89,Female,Control,Control,Control,Control,Control,340,6.75
+rimod36,84,Female,Control,Control,Control,Control,Control,336,6.68
+rimod1,83,Female,Control,Control,Control,Control,Control,363,6.6
+rimod56,88,Male,Control,Control,Control,Control,Control,340,7.3
