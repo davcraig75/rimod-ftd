@@ -26,8 +26,8 @@ function render_browser_full(browser) {
     var range = (browser.g38[1] - browser.g38[0]);
     var res=range>10000000?10000000:range>1000000?1000000:range>100000?100000:range>10000?10000:range>1000?1000:1
     browser.res=res;
-    //jQuery("#browser_accordian").addClass('active');
-    //jQuery("#browser_accordian > div.accd-body.jsa-body").show();    
+    //jQueryITG("#browser_accordian").addClass('active');
+    //jQueryITG("#browser_accordian > div.accd-body.jsa-body").show();    
     var selectedIndex=Index(browser.vgSpec.signals, "selected");
     browser.vgSpec.signals[selectedIndex].update = "{'gene':'" + browser.search.gene+"'}";
     loader(1,"render browser");
@@ -91,7 +91,7 @@ function render_browser_full(browser) {
                 }               
             }
         });
-        jQuery(window).resize(function () {
+        jQueryITG(window).resize(function () {
             result.view.resize().width(setWidth("menu")).renderer('canvas').hover().run();
         });
         loader(0, "done with that"); 

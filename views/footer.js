@@ -1,27 +1,25 @@
 var accordion = function () {
-    var $accordion = jQuery('.jsa');
-    var $accordion_header = $accordion.find('.jsa-header');
-    var $accordion_item = jQuery('.jsa-item'); // default settings 
+    var jQueryITGaccordion = jQueryITG('.jsa');
+    var jQueryITGaccordion_header = jQueryITGaccordion.find('.jsa-header');
+    var jQueryITGaccordion_item = jQueryITG('.jsa-item'); // default settings 
     var settings = {
         speed: 400,
         oneOpen: true
     };
     return {
-        // pass configurable object literal
-        init: function init($settings) {
-            $accordion_header.on('click', function () {
-                accordion.toggle($(this));
+        init: function init(jQueryITGsettings) {
+            jQueryITGaccordion_header.on('click', function () {
+                accordion.toggle(jQueryITG(this));
             });
-            $.extend(settings, $settings); // ensure only one accordion is active if oneOpen is true
-            
-            jQuery('.jsa-item.active').find('> .jsa-body').show();
+            //jQueryITG.extend(settings, jQueryITGsettings); // ensure only one accordion is active if oneOpen is true
+            jQueryITG('.jsa-item.active').find('> .jsa-body').show();
         },
-        toggle: function toggle($this) {
-            //if (settings.oneOpen && $this[0] != $this.closest('.jsa').find('> .jsa-item.active > .jsa-header')[0]) {
-                $this.closest('.jsa').find('> .jsa-item').removeClass('active').find('.jsa-body').slideUp();
+        toggle: function toggle(jQueryITGthis) {
+            //if (settings.oneOpen && jQueryITGthis[0] != jQueryITGthis.closest('.jsa').find('> .jsa-item.active > .jsa-header')[0]) {
+            //jQueryITGthis.closest('.jsa').find('> .jsa-item').removeClass('active').find('.jsa-body').slideUp();
             //} // show/hide the clicked accordion item
-            $this.closest('.jsa-item').toggleClass('active');
-            $this.next().stop().slideToggle(settings.speed);
+            jQueryITGthis.closest('.jsa-item').toggleClass('active');
+            jQueryITGthis.next().stop().slideToggle(settings.speed);
         }
     };
 }();
@@ -40,17 +38,17 @@ var menufunction=function(selected) {
     browser.selected=selected;    
     Object.keys(parents).forEach(function (key) {
         if (selected!= key){
-            jQuery(key+'Button').removeClass('active');
-            jQuery(key).hide();
+            jQueryITG(key+'Button').removeClass('active');
+            jQueryITG(key).hide();
         }
      });
-     jQuery(selected+'Button').addClass('active');
-     jQuery(parents[selected]+'Button').addClass('active');
-     jQuery(selected).show();
+     jQueryITG(selected+'Button').addClass('active');
+     jQueryITG(parents[selected]+'Button').addClass('active');
+     jQueryITG(selected).show();
      if (selected=="#Genes") {
-         jQuery("#Browser").show();  
-         jQuery("#ExpressionButton").addClass('active');
-         jQuery('#ExpressionBody').show();
+         jQueryITG("#Browser").show();  
+         jQueryITG("#ExpressionButton").addClass('active');
+         jQueryITG('#ExpressionBody').show();
      }
 };
 
@@ -58,7 +56,7 @@ var readurl=function() {
     loader(1,"redurl");
     var url_hash = window.location.hash.substr();
     var found=0;
-    jQuery.each(parents, function( index, value ) {
+    jQueryITG.each(parents, function( index, value ) {
         if (url_hash == value) {
             
             menufunction(value);
@@ -74,7 +72,7 @@ var readurl=function() {
             if (typeof res[1]) {            
                 browser.search.gene=res[1];
                 window.location.replace("?gene=" + browser.search.gene+"#Genes");
-                //jQuery("#gene").val(browser.search.gene);
+                //jQueryITG("#gene").val(browser.search.gene);
                 browser=get_gene(browser);               
                 menufunction('#Genes');
             }
@@ -128,29 +126,29 @@ accordion.init({
     oneOpen: true
 });   
 
-jQuery.each(pages, function( index, value ) {
+jQueryITG.each(pages, function( index, value ) {
     var aval=value+'Button';
-    jQuery(value+'Button').on('click', function () {
-        var myclickedbutton = "#"+jQuery(this).attr('id');
+    jQueryITG(value+'Button').on('click', function () {
+        var myclickedbutton = "#"+jQueryITG(this).attr('id');
         var mypage = myclickedbutton.replace("Button", "");
-        jQuery(mypage).hide();
+        jQueryITG(mypage).hide();
         menufunction(mypage);
         window.location.replace(mypage);
     });           
 });
 
 
-jQuery.fn.scrollView = function () {
+jQueryITG.fn.scrollView = function () {
     return this.each(function () {
-        jQuery('html, body').animate({
-            scrollTop: jQuery(this).offset().top
+        jQueryITG('html, body').animate({
+            scrollTop: jQueryITG(this).offset().top
         }, 0);
     });
 };
 
-jQuery("#gene").on("keypress", function (e) {
+jQueryITG("#gene").on("keypress", function (e) {
     if (e.which == 13) {
-        var textfield=jQuery("#gene").val().toUpperCase();
+        var textfield=jQueryITG("#gene").val().toUpperCase();
         //console.log(textfield);
         var urlPattern=/CHR(.*?):(.*?)-(.*)/;
         var rsPattern=/RS([0-9]*)/;

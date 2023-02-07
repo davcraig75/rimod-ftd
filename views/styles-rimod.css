@@ -20,7 +20,15 @@
 	color: #1c1f2a;
 }
 /* Menu –––––––––––––––––––––––––––––––––––––––––––––––––– */
+.coldark {
+	font-size: 10px;
+	line-height: 1em;
 
+}
+.collight {
+	background:#b4c5e0;
+	
+}
 .itg-grid-wide {
 	display: table-cell;
 	width: 100%;

@@ -192,7 +192,7 @@ function make_browser(browser, genes) {
 }
 
 var insert_API=function(result,name_values,url){    
-    jQuery.ajax({
+    jQueryITG.ajax({
         type: 'GET',url: url,async: true,dataType: 'json',
         beforeSend: function beforeSend() {loader(1,'insert_API');},
         error: function error(xhr) {},
@@ -208,7 +208,7 @@ var insert_API=function(result,name_values,url){
 };
 
 var gpos_search=function(result,gene_url) {
-    jQuery.ajax({
+    jQueryITG.ajax({
         type: 'GET',
         url: gene_url,
         async: true,
@@ -238,23 +238,23 @@ var gpos_search=function(result,gene_url) {
 
 var reformat_gene_description = function reformat_gene_description(genes) {
     var wordvalues = "";
-    jQuery('#GeneLookup').show();
-    jQuery("#gene_info").show();
-    jQuery('#gene_name').empty();
-    jQuery('#gene_name2').empty();
-    jQuery('#gene_name3').empty();
-    jQuery('#Gene_full_name').empty();
-    jQuery('#Ensembl_gene').empty();
-    jQuery('#Ensembl_gene_ref').empty();
-    jQuery('#Gene_other_names').empty();
-    jQuery('#chr').empty();
-    jQuery('#Uniprot_ref').empty();
-    jQuery('#Entrez_gene').empty();
-    jQuery('#GeneLookup').empty();
-    jQuery('#diseasemark').empty();
-    jQuery('#transcript_list').empty();
-    jQuery('#start_pos').empty();
-    jQuery('#dir').empty();
+    jQueryITG('#GeneLookup').show();
+    jQueryITG("#gene_info").show();
+    jQueryITG('#gene_name').empty();
+    jQueryITG('#gene_name2').empty();
+    jQueryITG('#gene_name3').empty();
+    jQueryITG('#Gene_full_name').empty();
+    jQueryITG('#Ensembl_gene').empty();
+    jQueryITG('#Ensembl_gene_ref').empty();
+    jQueryITG('#Gene_other_names').empty();
+    jQueryITG('#chr').empty();
+    jQueryITG('#Uniprot_ref').empty();
+    jQueryITG('#Entrez_gene').empty();
+    jQueryITG('#GeneLookup').empty();
+    jQueryITG('#diseasemark').empty();
+    jQueryITG('#transcript_list').empty();
+    jQueryITG('#start_pos').empty();
+    jQueryITG('#dir').empty();
     if (genes) {
         genes.genetext = true;
         if (genes.pubmed_text) {
@@ -277,56 +277,56 @@ var reformat_gene_description = function reformat_gene_description(genes) {
             var text = genes.Gene_other_names;
             text = text.replace(/\;/g, '<br>');
             genes.Gene_other_names = text;
-            jQuery('#Gene_other_names').empty().append(genes.Gene_other_names);
+            jQueryITG('#Gene_other_names').empty().append(genes.Gene_other_names);
         } else {
-            jQuery('#Gene_other_names').parent('tr').hide();
+            jQueryITG('#Gene_other_names').parent('tr').hide();
         }
         if (genes.Gene_old_names) {
             var text = genes.Gene_old_names;
             text = text.replace(/\;/g, '<br>');
             genes.Gene_old_names = genes.Gene_old_names + ', ' + text;
-            jQuery('#Gene_other_names').append(genes.Gene_old_names);
+            jQueryITG('#Gene_other_names').append(genes.Gene_old_names);
         }
 
         if (genes.transcripts) {
-            jQuery("#transcript_list").append(genes.transcripts[0]['transcript']);
-            jQuery.each(genes.transcripts, function (i, val) {
+            jQueryITG("#transcript_list").append(genes.transcripts[0]['transcript']);
+            jQueryITG.each(genes.transcripts, function (i, val) {
                 if (i != 0) {
-                    jQuery("#transcript_list").append('<br>' + genes.transcripts[i]['transcript']);
+                    jQueryITG("#transcript_list").append('<br>' + genes.transcripts[i]['transcript']);
                 }
             });
         }
     } else {
         genes = [];
-        jQuery('#results').hide();
+        jQueryITG('#results').hide();
         genes.genetext = false;
-        jQuery("#gene_info").hide();
-        jQuery('#gene_name').empty().append('Data for ' +browser.search.gene+' is not available. Use HUGO gene names.');
-        jQuery('#itg-wordcloud-parent').empty().hide();
-        jQuery('#view_smartplot').empty().hide();
-        jQuery('#GeneLookup').hide();
+        jQueryITG("#gene_info").hide();
+        jQueryITG('#gene_name').empty().append('Data for ' +browser.search.gene+' is not available. Use HUGO gene names.');
+        jQueryITG('#itg-wordcloud-parent').empty().hide();
+        jQueryITG('#view_smartplot').empty().hide();
+        jQueryITG('#GeneLookup').hide();
         return null;
     }
     delete genes._id;
-    jQuery('#gene_name').empty().append(genes.gene);
-    jQuery('#gene_name2').empty().append(genes.gene);
-    jQuery('#gene_name3').empty().append(genes.gene);
-    jQuery('#Gene_full_name').empty().append(genes.Gene_full_name);
-    jQuery('#Ensembl_gene_ref').attr("href", "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + genes.Ensembl_gene).append(genes.Ensembl_gene);
+    jQueryITG('#gene_name').empty().append(genes.gene);
+    jQueryITG('#gene_name2').empty().append(genes.gene);
+    jQueryITG('#gene_name3').empty().append(genes.gene);
+    jQueryITG('#Gene_full_name').empty().append(genes.Gene_full_name);
+    jQueryITG('#Ensembl_gene_ref').attr("href", "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + genes.Ensembl_gene).append(genes.Ensembl_gene);
     if (genes.pos38) {
         if (genes.pos38.constructor === Array) {
-            jQuery('#chr').empty().append('chr'+genes.chr+':'+genes.pos38[0] + '-' + genes.pos38[1]);
+            jQueryITG('#chr').empty().append('chr'+genes.chr+':'+genes.pos38[0] + '-' + genes.pos38[1]);
         }
     }
-    jQuery('#Uniprot_ref').attr("href", "http://www.uniprot.org/uniprot/" + genes['Uniprot_acc']).append(genes['Uniprot_id']);
-    jQuery('#Entrez_gene_ref').attr("href", "https://www.ncbi.nlm.nih.gov/gene/" + genes['gene']).append(genes.gene);
+    jQueryITG('#Uniprot_ref').attr("href", "http://www.uniprot.org/uniprot/" + genes['Uniprot_acc']).append(genes['Uniprot_id']);
+    jQueryITG('#Entrez_gene_ref').attr("href", "https://www.ncbi.nlm.nih.gov/gene/" + genes['gene']).append(genes.gene);
     wordvalues = wordvalues.replace(/[^A-Za-z]/g, ' ');
     genes.wordvalues = wordvalues; 
 
     if (wordvalues.match(/parkinson/i)) {
-     //  jQuery('#show_diseaseInsert').css('display', 'inline-block');
+     //  jQueryITG('#show_diseaseInsert').css('display', 'inline-block');
     } else {
-        jQuery('#show_diseaseInsert').css('display', 'none');
+        jQueryITG('#show_diseaseInsert').css('display', 'none');
     }
 
     return genes;
@@ -344,7 +344,7 @@ var render_gene_wordcloud = function render_gene_wordcloud(vals) {
     vgSpec['marks'][0]['transform'][0]['size'][1] = newheight;
     var wordcloud_view = new vega.View(vega.parse(vgSpec)).initialize('#gene_wordcloud');
     wordcloud_view.change('myvalues', vega.changeset().insert(vals)).width(newwidth).height(newheight).renderer('canvas').hover().run();
-    jQuery(window).resize(function () {
+    jQueryITG(window).resize(function () {
         loader(1,'resize');
         wordcloud_view.resize().width(setWidth()).height(newheight).renderer('canvas').hover().run();
         loader(0,'resize');
@@ -357,9 +357,9 @@ var get_gene = function get_gene(browser) {
     var query = window.location.search;
     if (browser.search.gene) {
         browser.search.gene = browser.search.gene.toUpperCase();
-        //jQuery('#SC').show();
-        jQuery("#gene").val("");
-        jQuery('#gene').blur();
+        //jQueryITG('#SC').show();
+        jQueryITG("#gene").val("");
+        jQueryITG('#gene').blur();
         window.location.replace("?gene=" + browser.search.gene+"#Genes"); 
         load_geneInfo(browser);
     }
@@ -371,7 +371,7 @@ var load_geneInfo = function load_geneInfo(browser) {
     ];    
     var mygene = browser.search.gene;
     var gene_api_url = browser.global_api + "/gene/" + mygene;
-    jQuery.ajax({
+    jQueryITG.ajax({
         'async': true,
         'crossDomain': true,
         'url': gene_api_url,
@@ -400,39 +400,40 @@ var load_geneInfo = function load_geneInfo(browser) {
                       browser.g38=[Gene_array.g38[0],Gene_array.g38[1]];   
                     }
                     var cols=["RNA Expression","RNA Log(Expression)","BulkRNA_Log_v0","BulkRNA_v0","Age","Sex","Disease","Gene","Mutation","Pathology","Disease-Gene","Min pmd","pH"];
-                    CrossCorrelate("expgraff","itg-browser-width",browser.samples,
+                    crossex("expgraff",browser.samples,
                     [
-                      {"name":"X_Axis","value":"Disease-Gene","bind":{"options":cols}},
-                      {"name":"Y_Axis","value":"RNA Expression","bind":{"options":cols}},
-                      {"name":"Facet_Cols_By","value":"None","bind":{"options":cols}},       
-                      {"name":"Facet_Rows_By","value":"None","bind":{"options":cols}},       
-                      {"name":"Color_By","value":"Disease-Gene","bind":{"options":cols}},    
-                      {"name":"Filter_Out_From","value":"None","bind":{"options":cols}},       
-                      {"name":"Filter_Additional","value":"None","bind":{"options":cols}},     
-                      {"name":"graph_title","value":"Expression of "+mygene},
-                      {"name":"Dash_Height","value":2},
-                      {"name":"Palette","value":"tableau20"},
-                      {"name":"Dash_Width","value":0.2},
-                      {"name":"Dash_Radius","value":4},
-                      {"name":"Max_Plot_Height","value":150},
-                      {"name":"Max_Plot_Width","value":800},
-                      {"name":"Opacity_","value":1},
-                      {"name":"Xaxis_Height","value":120},
-                      {"name":"Legend_Height","value":50},
-                      {"name":"Jitter_","value":false},
-                      {"name":"Violin_","value":false},
-                      {"name":"Row_Header_Width","value":100},
-                      {"name":"Dashes_","value":true},
-                      {"name":"Feature_Size","value":30}    
-                    ]
+                        {"editable":itgapp.vega_vals},
+                        {"exportable":true},                        
+                        {"name":"X_Axis","value":"Disease-Gene","bind":{"options":cols}},
+                        {"name":"Y_Axis","value":"RNA Expression","bind":{"options":cols}},
+                        {"name":"Facet_Cols_By","value":"None","bind":{"options":cols}},       
+                        {"name":"Facet_Rows_By","value":"None","bind":{"options":cols}},       
+                        {"name":"Color_By","value":"Disease-Gene","bind":{"options":cols}},    
+                        {"name":"Filter_Out_From","value":"None","bind":{"options":cols}},       
+                        {"name":"Filter_Additional","value":"None","bind":{"options":cols}},     
+                        {"name":"graph_title","value":"Expression of "+mygene},
+                        {"name":"Dash_Height","value":0.75},
+                        {"name":"Grid_Opacity","value":0.5},
+                        {"name":"Legend_Height","value":75},
+                        {"name":"Palette","value":"category10"},
+                        {"name":"Jitter_Radius","value":5},
+                        {"name":"Jitter_","value":true},
+                        {"name":"Max_Point","value":50},
+                        {"name":"Max_Point","value":50},
+                        {"name":"X_Axis_Height","value":120},
+                        {"name":"Row_Height","value":200},
+                        {"name":"Legend_Cols","value":4},
+                        {"name":"Max_Plot_Height","value":200},
+                        {"name":"Dash_Width","value":0.3}
+                    ],"itg-browser-width"
                   );  
                        
                     browser.loaded=false;
                     var newgenes=[{gene:data.gene,biotype:data.biotype,chr:data.chr,g38:data.g38,geneid:data.geneid,name:data.name,gpos:data.g38,pos38:data.pos38,t_index:data.t_index,transcripts:data.transcripts}];
                     browser=make_browser(browser,newgenes);                    
                     render_browser_full(browser);
-                    jQuery("#Browser").show();
-                    jQuery("#gene").val(browser.search.gene);
+                    jQueryITG("#Browser").show();
+                    jQueryITG("#gene").val(browser.search.gene);
                     
                 }
             }
@@ -443,16 +444,16 @@ var load_geneInfo = function load_geneInfo(browser) {
 };
 
 var effect = function(i) {
-    jQuery( "#wait" ).css("color","#660000");
-    jQuery( "#wait" ).append("...Please wait...");
-    return jQuery( i ).fadeTo(1000*1,0.5).delay( 1200 );    
+    jQueryITG( "#wait" ).css("color","#660000");
+    jQueryITG( "#wait" ).append("...Please wait...");
+    return jQueryITG( i ).fadeTo(1000*1,0.5).delay( 1200 );    
 };
 
-jQuery( "#clickexcel" ).on( "click", function() {
-  jQuery.when( effect("#gene_expression_table2") ).done(function() {
-    jQuery("button.dt-button.buttons-excel.buttons-html5").click();
-    jQuery( "#wait" ).css("color","black");
-    jQuery( "#wait" ).append("Finished.");
-    jQuery( "#gene_expression_table2" ).fadeTo(1000,1);  
+jQueryITG( "#clickexcel" ).on( "click", function() {
+  jQueryITG.when( effect("#gene_expression_table2") ).done(function() {
+    jQueryITG("button.dt-button.buttons-excel.buttons-html5").click();
+    jQueryITG( "#wait" ).css("color","black");
+    jQueryITG( "#wait" ).append("Finished.");
+    jQueryITG( "#gene_expression_table2" ).fadeTo(1000,1);  
   });
 });

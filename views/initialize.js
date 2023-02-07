@@ -119,10 +119,10 @@ var Index = function Index(items, name) {
 
 
 var setWidth = function setWidth(id) {
-  var w = jQuery('#'+id).width();
-  if (w==null || w<200) {w=jQuery('#itg-master-width').width();}
-  if (w==null || w<200) {w=jQuery('#Home').width();}
-  if (w==null || w<200) {w=jQuery('#Genes').width();}
+  var w = jQueryITG('#'+id).width();
+  if (w==null || w<200) {w=jQueryITG('#itg-master-width').width();}
+  if (w==null || w<200) {w=jQueryITG('#Home').width();}
+  if (w==null || w<200) {w=jQueryITG('#Genes').width();}
   return w;
 };
 
@@ -145,7 +145,7 @@ function toggle(id) {
 
 
 var loadData = function loadData(data) {
-  jQuery("#gene").easyAutocomplete({
+  jQueryITG("#gene").easyAutocomplete({
     data: data,
     getValue: "gene",
     list: {
@@ -198,7 +198,7 @@ var embed_vega = function embed_vega(vgspec, vgsignals, data, element, tooltips)
         tooltip: tooltips
     }).then(function (result) {
         loader(1,'start embed embed vega');
-        jQuery(window).resize(function () {
+        jQueryITG(window).resize(function () {
             result.view.resize().width(setWidth()).height(setHeight()).run();
         });
         loader(0,'end vega embed vega');
