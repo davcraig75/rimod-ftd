@@ -6,9 +6,9 @@ use List::Util qw( min max );
 use Data::Dumper;
 use POSIX qw/ceil/;
 
-$clinical_data="../../src/RiMod_master_sample_file.melt.tsv";
+$clinical_data="../src/RiMod_master_sample_file.melt.tsv";
 $port="27017";
-$database="rimod";
+$database="rimod23";
 @meta=(
     'Sex',
     'Disease',
@@ -19,21 +19,21 @@ $database="rimod";
 );
 my $sampleRef;
 my %pivot;
-my $annotateCollection = newConn( 'AnnotateByFoundinPD', 'gene', 'localhost:27020' );
-my $infoCollection = newConn( 'AnnotateByFoundinPD', 'gene_info', 'localhost:27020' );
+my $annotateCollection = newConn( 'Annotate38By', 'gene', 'localhost:27017' );
+my $infoCollection = newConn( 'Annotate38By', 'gene_info', 'localhost:27017' );
 my $GeneDetailCollection  = newConn( $database, 'gene_detail', "localhost:$port" );
 my $SummaryCollection = newConn( $database, 'gene_summary', "localhost:$port" );
 $assays{"BulkRNA"}="RNAseq.version0.tsv";
-$assays{"SmallRNA"}="smRNAseq.frontal.version1.tsv";
-$drop=1;
-$initialize_genes=1;
+$assays{"SMALLRNA"}="smRNAseq.frontal.version1.tsv";
+$drop=0;
+$initialize_genes=0;
 
 &clinical_info;
 $valid_summary={};
 $calc_public=1;
 
 genes("BulkRNA",$assays{"BulkRNA"},",",$GeneDetailCollection);
-genes("SMALLRNA",$assays{"SmallRNA"},",",$GeneDetailCollection);
+genes("SMALLRNA",$assays{"SMALLRNA"},",",$GeneDetailCollection);
 
 sub cycle {    
     my ($assay) = @_;
@@ -178,10 +178,37 @@ sub init_genes {
                         $jsonPD->{$key}=$doc->{$key};
                     }   
                 } else {
-                    print "not defined $key for $doc->{'_id'}\n";
+                    #print "not defined $key for $doc->{'_id'}\n";
                 }
             }             
         }
+my $names=[];
+        my $nl={};
+        if (exists($doc->{'names'})) {
+                foreach my $name (@{$doc->{'names'}}) {
+                        $name=uc($name);
+                        if (!exists($nl->{$name})) {
+                                push(@{$names},$name);
+                                $nl->{$name}=1;
+                        }
+                }               
+        }
+        if (exists($doc->{'Gene_other_names'})) {
+                @s=split(/\;/,$doc->{'Gene_other_names'});
+                foreach my $name (@s) {
+                        $name=uc($name);
+                        if (!exists($nl->{$name})) {
+                                push(@{$names},$name);
+                                $nl->{$name}=1;
+                                if ($name=~/HSA/){
+                                        push(@{$names},$name."-3P");
+                                        push(@{$names},$name."-5P");
+                                }
+                        }                                               
+                }
+        }
+        $jsonPD->{'names'}=$names;
+        $jsonPD->{'g0'}=$jsonPD->{'g38'}->[0];        
         $jsonPD->{'g0'}=$jsonPD->{'g38'}->[0];
         $jsonPD->{'p0'}=$jsonPD->{'pos38'}->[0];
         $jsonPD->{'g1'}=$jsonPD->{'g38'}->[1];
@@ -237,23 +264,73 @@ sub genes {
              @buf=split(/\t/,$line);
         }
         $buf[0]=uc($buf[0]);        
-        $jsonPD={};  
-        #$gene_check=$coll->count({'names'=>$buf[0]});
-        #if ($gene_check==1) { 
-            my $gene_rec=$coll->find_one({'names'=>$buf[0]});
-            my $id=$gene_rec->{'_id'};
-            if (exists($gene_rec->{'gene'})) {
-                $jsonPD->{'gene'}=$gene_rec->{'gene'};
-                my ($array,$pivotRef)=&cycle($assay);     
-                print "gene:$jsonPD->{'gene'}\n";
-                $jsonPD->{'summaries_'.$assay}=$pivotRef;
-                
-                $SummaryCollection->update_one({'gene'=>$jsonPD->{'gene'}},{'$set'=>{'summaries_'.$assay=>$pivotRef}});
-                
-                $jsonPD->{'samples_' . $assay}=$array;
-                $coll->update_one({'_id'=>$id},{'$set'=>$jsonPD});
-            }            
-    	#} else { warn "-WARN: Couldnt find $buf[0] or too many $gene_check\n";}  	
+        $jsonPD={}; 
+        if (!$#buf>0) {print "error:$line\n";next LOOP2;}
+        $gc=uc($buf[0]);        
+        $gcs=$buf[0];
+        $gcs=~s/-3p$//;
+        $gcs=~s/-5p$//;
+        $en=$buf[0];
+        $en=~s/\..*//g;
+        my $d;
+        my $t;
+        if ($cur=$GeneDetailCollection->find_one({"gene"=>$gc})) {
+            print "standard: $gc, $cur\n";
+            $t=$gc;
+            $d=$cur;
+            my ($array,$pivotRef)=&cycle($assay); 
+            if ($calc_public==1) {            
+                $SummaryCollection->update_one({'gene'=>$d->{'gene'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+                $GeneDetailCollection->update_one({'_id'=>$d->{'_id'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+            }        
+            @cur=$GeneDetailCollection->find({"names"=>$t})->all;
+            $GeneDetailCollection->update_one({'_id'=>$d->{'_id'}},{'$set'=>{'samples_COUNT'=>$array}});             
+        } elsif ($cur=$GeneDetailCollection->find_one({"names"=>$gc})) {
+            print "extended: $gc, $cur\n";
+            $t=$gc;
+            $d=$cur;
+            my ($array,$pivotRef)=&cycle($assay); 
+            if ($calc_public==1) {            
+                $SummaryCollection->update_one({'gene'=>$d->{'gene'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+                $GeneDetailCollection->update_one({'_id'=>$d->{'_id'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+            }        
+            @cur=$GeneDetailCollection->find({"names"=>$gc})->all;
+            foreach $f (@cur) {
+                $GeneDetailCollection->update_one({'_id'=>$f->{'_id'}},{'$set'=>{'samples_COUNT'=>$array}});
+                print "updated $assay\n";
+            }               
+        } elsif ($cur=$GeneDetailCollection->find_one({"names"=>$gcs})) {
+            print "micro: $gc, $cur\n";
+            $t=$gcs;
+            $d=$cur;
+            my ($array,$pivotRef)=&cycle($assay); 
+            if ($calc_public==1) {            
+                $SummaryCollection->update_one({'gene'=>$d->{'gene'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+                $GeneDetailCollection->update_one({'_id'=>$d->{'_id'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+            }        
+            @cur=$GeneDetailCollection->find({"names"=>$gcs})->all;
+            foreach $f (@cur) {
+                $GeneDetailCollection->update_one({'_id'=>$f->{'_id'}},{'$set'=>{'samples_COUNT'=>$array}});
+                print "updated $assay\n";
+            }               
+        } elsif ($cur=$GeneDetailCollection->find_one({"names"=>$en})) {
+            print "shortensemble:$en, $cur\n";
+            $t=$en;
+            $d=$cur;
+            my ($array,$pivotRef)=&cycle($assay); 
+            if ($calc_public==1) {            
+                $SummaryCollection->update_one({'gene'=>$d->{'gene'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+                $GeneDetailCollection->update_one({'_id'=>$d->{'_id'}},{'$set'=>{'summaries_COUNT'=>$pivotRef}});
+            }        
+            @cur=$GeneDetailCollection->find({"names"=>$en})->all;
+            foreach $f (@cur) {
+                $GeneDetailCollection->update_one({'_id'=>$f->{'_id'}},{'$set'=>{'samples_COUNT'=>$array}});
+                print "updated $assay\n";
+            }               
+        } else {
+            print "Didn't find: $buf[0] $gc $en $gcs\n";
+            next LOOP2;
+        }       
     }
     close (INPUT);  	
 }
