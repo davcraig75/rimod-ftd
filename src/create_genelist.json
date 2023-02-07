@@ -1,0 +1,1 @@
+mongo --quiet ppmi23  --eval 'printjson(db.gene_info.find({},{'gene':1,'_id':0,'g0':1,g1:1},{sort:{"g0":1}}).toArray())' > output.json
