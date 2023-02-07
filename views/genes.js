@@ -162,18 +162,18 @@ function make_browser(browser, genes) {
                             browser.scrn_summaries.values.push( gene.clusters_summaries[n]);
                         }
                     }
-                    if (gene.summaries_BulkRNA,gene.summaries_BulkRNA) {
+                    if (gene.summaries_COUNT,gene.summaries_COUNT) {
                         //console.log('bulk rna summary found');
-                        for (var o = 0; o < gene.summaries_BulkRNA.length; o++) {
-                            gene.summaries_BulkRNA[o]['g0']=gene.g38[0];
-                            gene.summaries_BulkRNA[o].track=s;
-                            gene.summaries_BulkRNA[o]['gene']=gene.gene; 
-                            browser.rnab_summaries.values.push( gene.summaries_BulkRNA[o]);
+                        for (var o = 0; o < gene.summaries_COUNT.length; o++) {
+                            gene.summaries_COUNT[o]['g0']=gene.g38[0];
+                            gene.summaries_COUNT[o].track=s;
+                            gene.summaries_COUNT[o]['gene']=gene.gene; 
+                            browser.rnab_summaries.values.push( gene.summaries_COUNT[o]);
                         }
                     }
                     var gg0=gene.g38[0];
                     var ggend=gg0+Math.max(MinPosSize,Math.abs(gene.g38[1]-gene.g38[0]));
-                    if (gene.clusters_summaries_BulkRNA||gene.summaries_BulkRNA) { 
+                    if (gene.clusters_summaries_COUNT||gene.summaries_COUNT) { 
                         for (x=0;x<=6;++x) {
                             if ( (t+gene.transcripts.length+x) > (tracks.length-1) ) {
                                 tracks[t+gene.transcripts.length+x]=[{'g0':gg0,'g1':ggend}];
@@ -384,13 +384,20 @@ var load_geneInfo = function load_geneInfo(browser) {
         'success': function success(data) {
             loader(1,'geneInfo just got data');
             data = JSON.parse(itgz.decompressFromBase64(decodeURI(data.gene))); 
+
             var Gene_array = reformat_gene_description(data);
             if (Gene_array) {
                 if (Gene_array.genetext) {
-                    browser.samples= data.samples_BulkRNA;
+                    
+                    browser.samples= data.samples_COUNT;
                     for (var g = 0; g < browser.samples.length; g++) {
-                        browser.samples[g]['RNA Expression']=browser.samples[g]['BulkRNA_v0'];
-                        browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['BulkRNA_Log_v0'];
+                        if (browser.samples[g]['BulkRNA_v0']) {
+                            browser.samples[g]['RNA Expression']=browser.samples[g]['BulkRNA_v0'];
+                            browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['BulkRNA_Log_v0'];
+                        } else if (browser.samples[g]['SMALLRNA_v0']) {
+                            browser.samples[g]['RNA Expression']=browser.samples[g]['SMALLRNA_v0'];
+                            browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['SMALLRNA_Log_v0'];                            
+                        }                        
                     };
 
                     render_gene_wordcloud(Gene_array.wordvalues);
@@ -399,7 +406,7 @@ var load_geneInfo = function load_geneInfo(browser) {
                     if ('g38' in Gene_array) {
                       browser.g38=[Gene_array.g38[0],Gene_array.g38[1]];   
                     }
-                    var cols=["RNA Expression","RNA Log(Expression)","BulkRNA_Log_v0","BulkRNA_v0","Age","Sex","Disease","Gene","Mutation","Pathology","Disease-Gene","Min pmd","pH"];
+                    var cols=["RNA Expression","RNA Log(Expression)","Age","Sex","Disease","Gene","Mutation","Pathology","Disease-Gene","Min pmd","pH"];
                     crossex("expgraff",browser.samples,
                     [
                         {"editable":itgapp.vega_vals},
@@ -419,7 +426,7 @@ var load_geneInfo = function load_geneInfo(browser) {
                         {"name":"Jitter_Radius","value":5},
                         {"name":"Jitter_","value":true},
                         {"name":"Max_Point","value":50},
-                        {"name":"Max_Point","value":50},
+                        {"name":"Min_Point","value":50},
                         {"name":"X_Axis_Height","value":120},
                         {"name":"Row_Height","value":200},
                         {"name":"Legend_Cols","value":4},

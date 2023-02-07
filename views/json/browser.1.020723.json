@@ -1,0 +1,2507 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "autosize": "fit-x",
+  "width": 875,
+  "height": 1600,
+  "resize": true,
+  "padding": {"left": 0, "top": 20, "right": 0, "bottom": 0},
+  "config": {
+    "background": "#fff",
+    "axis": {
+      "titleFont": "Arial, Helvetica",
+      "titleFontSize": {"signal": "if(width<500,8,12)"},
+      "titleFontWeight": "normal",
+      "titleColor": "#333333b5",
+      "labelColor": "#333333b5",
+      "labelFont": "GibsonRegular,Verdana, Arial, Helvetica",
+      "labelFontSize": 10
+    },
+    "title": {
+      "color": "#333",
+      "font": "Arial, Helvetica",
+      "fontSize": {"signal": "if(width<500,10,14)"},
+      "fontWeight": "bold"
+    },
+    "legend": {
+      "labelFontSize": {"signal": "if(width<500,8,10)"},
+      "labelFont": "GibsonRegular,Verdana, Arial, Helvetica",
+      "titleFont": "BebasNeueRegular,Verdana, Arial, Helvetica",
+      "titleFontSize": {"signal": "if(width<500,8,10)"},
+      "titleFontWeight": "bold",
+      "titleColor": "#333",
+      "titlePadding": 1,
+      "rowPadding": 0,
+      "labelLimit": 150,
+      "titleLimit": 200,
+      "padding": 2,
+      "strokeWidth": 1
+    },
+    "style": {
+      "SmallText": {"fontSize": 8, "color": "#333"},
+      "TrackLabel": {
+        "fill": "#00599c",
+        "dx": 5,
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3
+      },
+      "TrackButton": {
+        "fill": "#00599c",
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3
+      },
+      "TrackButtonText": {
+        "fill": "#444",
+        "fontWeight": "normal",
+        "align": "right"
+      },
+      "TrackLabelText": {
+        "height": "label_height",
+        "fill": "white",
+        "fontWeight": "bold",
+        "x": 5,
+        "fontSize": 12
+      },
+      "SubTrackLabelText": {
+        "height": "label_height",
+        "fill": "#555",
+        "x": 8,
+        "fontSize": 10
+      },
+      "Track": {
+        "stroke": "#777",
+        "strokeWidth": 0.5,
+        "cornerRadiusBottomLeft": 3,
+        "cornerRadiusBottomRight": 3
+      },
+      "HideButton": {
+        "fill": "#fff",
+        "fontSize": 20,
+        "fontWeight": "bold",
+        "align": "right"
+      },
+      "BoldLabel": {"fontSize": 10, "FontWeight": "bold"}
+    }
+  },
+  "title": {
+    "text": {
+      "signal": "'chr'+chrF+':'+format(floor(pdom[0]), ',')+' - '+if(chrF!=chrL,'chr' + chrL+':','')+format(floor(pdom[1]), ',')+' ('+format(gdom[1]-gdom[0], '.3s')+'bp)'"
+    },
+    "subtitle": {"signal": "selected.gene"},
+    "encode": {"subtitle": {"interactive": true}}
+  },
+  "signals": [
+    {"name": "sgdom", "value": ""},
+    {
+      "name": "gwin",
+      "value": "[1,30000000000]",
+      "on": [{"events": {"signal": "sgdom"}, "update": "sgdom"}],
+      "update": "[781202888.1209269,788199337]"
+    },
+    {"name": "range", "update": "ceil(gdom[1]-gdom[0])"},
+    {
+      "name": "res",
+      "update": "range>10000000?10000000:range>1000000?1000000:range>100000?100000:range>10000?10000:range>1000?1000:1"
+    },
+    {"name": "brush_g"},
+    {
+      "name": "gap",
+      "update": "[format(gdom[0]-gwin[0],'.3s'),format(gwin[1]-gdom[1],'.3s')]"
+    },
+    {
+      "name": "trigger_load",
+      "update": "'{\"gwin\":['+if(gwin[0]>gdom[0],'neg','+')+','+if(gdom[1]>gwin[1],'neg','+')+'],\"res\":\"'+res+'\"}'"
+    },
+    {
+      "name": "gene_clickedFilter",
+      "value": "Disease",
+      "on": [
+        {
+          "events": "@gene_filterLegendlab:click",
+          "update": "datum.value",
+          "force": true
+        }
+      ]
+    },
+    {"name": "RNAB_clickedFilter"},
+    {
+      "name": "cage_clickedFilter",
+      "value": "Disease",
+      "on": [
+        {
+          "events": "@cage_filterLegendlab:click",
+          "update": "datum.value",
+          "force": true
+        }
+      ]
+    },
+    {"name": "override"},
+    {"name": "cage_show_individual", "value": false},
+    {"name": "meth_show_individual", "value": false},
+    {
+      "name": "hic_spawn",
+      "value": {},
+      "on": [
+        {
+          "events": "@hic_path:click",
+          "update": "[datum.bpx1,datum.bpy1,gdom[0],gdom[1]]"
+        }
+      ]
+    },
+    {"name": "selected", "update": "{'gene':'SNCA'}"},
+    {
+      "name": "user_click",
+      "value": {},
+      "on": [
+        {
+          "events": "@snps1:click,@snps2:click,@snps3:click,@snps4:click,@snps5:click,@snps6:click,@hic_path:click,@Show_Individual_CAGE:click,@Show_Individual_METH:click,@meth1:click",
+          "update": "{'rs':datum.rs,'g0':datum.g0,'bpx1':datum.bpx1,'bpy1':datum.bpy1,'gdom':gdom,'e':item().mark.name,'v':item().mark.items[0].text}"
+        }
+      ]
+    },
+    {"name": "gene"},
+    {"name": "brush_zoom"},
+    {"name": "ideo_cell_height", "value": 60},
+    {
+      "name": "height",
+      "update": "ideo_cell_height+genome_cell_height+cage_height+meth_height+meth_ind_height+cage_ind_height+label_height*15+200"
+    },
+    {
+      "name": "track_count",
+      "update": "if(rnab_track_minmax[1]>0,rnab_track_minmax[1],if(transcripts_track_minmax[1]>0,transcripts_track_minmax[1],if(genes_track_minmax[1],genes_track_minmax[1],20)))+10"
+    },
+    {"name": "genome_cell_height", "update": "track_count*12+label_height"},
+    {
+      "name": "hic_vis",
+      "value": true,
+      "on": [{"events": "@Hide_HIC_Button:click", "update": "false"}]
+    },
+    {"name": "label_height", "value": 18},
+    {"name": "hic_height", "value": 160},
+    {
+      "name": "meth_vis",
+      "update": "if(data('meth_summary_values').length>0,true,false)",
+      "on": [{"events": "@Hide_METH_Button:click", "update": "false"}]
+    },
+    {
+      "name": "meth_height",
+      "update": "if(meth_vis,100,0)",
+      "on": [{"events": "@Hide_METH_Button:click", "update": "false"}]
+    },
+    {"name": "meth_ind_height", "update": "if(meth_show_individual,400,0)"},
+    {
+      "name": "meth_clickedFilter",
+      "value": "Disease",
+      "on": [
+        {
+          "events": "@meth_filterLegendlab:click",
+          "update": "datum.value",
+          "force": true
+        }
+      ]
+    },
+    {
+      "name": "cage_vis",
+      "update": "if(data('cage_summary_values').length>0,true,false)",
+      "on": [{"events": "@Hide_CAGE_Button:click", "update": "false"}]
+    },
+    {"name": "cage_height", "update": "if(cage_vis,100,0)"},
+    {"name": "cage_ind_height", "update": "if(cage_show_individual,400,0)"},
+    {
+      "name": "unit",
+      "value": {},
+      "on": [
+        {"events": "mousemove", "update": "isTuple(group()) ? group() : unit"}
+      ]
+    },
+    {
+      "name": "chr2gpos",
+      "value": [
+        {
+          "1": 0,
+          "2": 250000000,
+          "3": 495000000,
+          "4": 695000000,
+          "5": 890000000,
+          "6": 1075000000,
+          "7": 1250000000,
+          "8": 1412000000,
+          "9": 1560000000,
+          "10": 1700000000,
+          "11": 1835000000,
+          "12": 1972000000,
+          "13": 2107000000,
+          "14": 2223000000,
+          "15": 2333000000,
+          "16": 2438000000,
+          "17": 2533000000,
+          "18": 2618000000,
+          "19": 2700000000,
+          "20": 2760000000,
+          "21": 2826000000,
+          "22": 2876000000,
+          "X": 2928000000,
+          "Y": 3088000000,
+          "M": 3148000000
+        }
+      ]
+    },
+    {
+      "name": "pdom",
+      "update": "if(chrF==chrL,[gdom[0]-chr2gpos[0][chrF],gdom[1]-chr2gpos[0][chrL]],[null,null])"
+    },
+    {"name": "show_pdom", "update": "if(pdom[0],true,false)"},
+    {"name": "chrF", "update": "data('vis_chr')[0]['chr']"},
+    {
+      "name": "chrL",
+      "update": "data('vis_chr')[length(data('vis_chr'))-1]['chr']"
+    },
+    {
+      "name": "down",
+      "value": null,
+      "on": [
+        {"events": "touchend", "update": "null"},
+        {"events": "mousedown, touchstart", "update": "xy()"}
+      ]
+    },
+    {
+      "name": "xcur",
+      "value": null,
+      "on": [
+        {"events": "mousedown, touchstart, touchend", "update": "slice(gdom)"}
+      ]
+    },
+    {
+      "name": "delta",
+      "value": [0, 1],
+      "on": [
+        {
+          "events": [
+            {
+              "source": "window",
+              "type": "mousemove",
+              "consume": true,
+              "between": [
+                {"type": "mousedown"},
+                {"source": "window", "type": "mouseup"}
+              ]
+            },
+            {
+              "type": "touchmove",
+              "consume": true,
+              "filter": "event.touches.length === 1"
+            }
+          ],
+          "update": "down ? [down[0]-x(),0] : [0,0]"
+        }
+      ]
+    },
+    {
+      "name": "anchor",
+      "value": [0, 0],
+      "on": [
+        {
+          "events": "wheel![event.shiftKey]",
+          "update": "[invert('gdom_scale', x())]"
+        },
+        {
+          "events": {
+            "type": "touchstart",
+            "filter": "event.touches.length===2"
+          },
+          "update": "[(gdom[0] + gdom[1]) / 2,0]"
+        }
+      ]
+    },
+    {
+      "name": "Clear_Filter",
+      "value": true,
+      "on": [
+        {"events": "mouseup[!event.item]", "update": "true", "force": true}
+      ]
+    },
+    {
+      "name": "zoom",
+      "value": 1,
+      "on": [
+        {
+          "events": "wheel![event.shiftKey]",
+          "force": true,
+          "update": "pow(1.001, event.deltaY * pow(16, event.deltaMode))"
+        },
+        {
+          "events": {"signal": "dist2"},
+          "force": true,
+          "update": "dist1 / dist2"
+        }
+      ]
+    },
+    {
+      "name": "dist1",
+      "value": 0,
+      "on": [
+        {
+          "events": {
+            "type": "touchstart",
+            "filter": "event.touches.length===2"
+          },
+          "update": "pinchDistance(event)"
+        },
+        {"events": {"signal": "dist2"}, "update": "dist2"}
+      ]
+    },
+    {
+      "name": "dist2",
+      "value": 0,
+      "on": [
+        {
+          "events": {
+            "type": "touchmove",
+            "consume": true,
+            "filter": "event.touches.length===2"
+          },
+          "update": "pinchDistance(event)"
+        }
+      ]
+    },
+    {
+      "name": "gdom",
+      "value": "[10,3100000000]",
+      "on": [
+        {
+          "events": {"signal": "delta"},
+          "update": "[if(xcur[0] + span(xcur) * delta[0] / width<1,1,xcur[0] + span(xcur) * delta[0] / width), if(xcur[1] + span(xcur) * delta[0] / width>3150000000,3150000000,xcur[1] + span(xcur) * delta[0] / width)]"
+        },
+        {
+          "events": {"signal": "zoom"},
+          "filter": "range<10000000",
+          "update": "[if(anchor[0] + (gdom[0] - anchor[0]) * zoom<1,1,anchor[0] + (gdom[0] - anchor[0]) * zoom), if(anchor[0] + (gdom[1] - anchor[0]) * zoom>3150000000,3150000000,anchor[0] + (gdom[1] - anchor[0]) * zoom)]"
+        },
+        {
+          "events": {"signal": "override"},
+          "update": "[override[0],override[1]]"
+        },
+        {
+          "events": {"signal": "brush_g"},
+          "filter": "range<10000000",
+          "update": "[brush_g[0],brush_g[1]]"
+        },
+        {
+          "events": "@snpsidio:click",
+          "update": "[datum.g-25000,datum.g+25000]"
+        },
+        {
+          "events": "@zoom_out_rect:click",
+          "filter": "range<10000000",
+          "update": "[gdom[0]-range*1.25,gdom[1]+range*1.25]"
+        },
+        {
+          "events": "@zoom_in_rect:click",
+          "update": "[(gdom[1]+gdom[0])/2-range/3,(gdom[1]+gdom[0])/2+range/3]"
+        }
+      ],
+      "update": "[783901518.1209269,785500707]"
+    },
+    {
+      "name": "show_transcripts",
+      "update": "transcripts_count<500 && (gdom[1]-gdom[0])<1000000 && transcripts_count>0"
+    },
+    {
+      "name": "show_genes",
+      "update": "win_genes_count<500 && !show_transcripts"
+    },
+    {"name": "max_gene_distance", "value": 500000000},
+    {"name": "max_exon_distance", "value": 10000000},
+    {
+      "name": "show_genenames",
+      "update": "win_genes_count<500 && !show_transcripts"
+    },
+    {"name": "win_genes_count", "update": "data('win_genes').length"},
+    {"name": "transcripts_count", "update": "data('win_transcripts').length"},
+    {
+      "name": "myurl",
+      "value": "/private/seq/g0/0/g1/3150000000",
+      "on": [
+        {
+          "events": {"signal": "if(range<20000,range,false)"},
+          "update": "'/private/seq/g0/'+gdom[0]+'/g1/'+gdom[1]"
+        }
+      ],
+      "init": "'/private/seq/g0/'+gdom[0]+'/g1/'+gdom[1]"
+    },        {"name": "cage_summary_min", "update": "0"},
+        {
+          "name": "cage_summary_max",
+          "update": "if(isDefined(cage_summary_maxmin[1]),max(100,cage_summary_maxmin[1]),100)"
+        }
+  ],
+  "data": [
+    {"name": "pvalorig_data"},
+    {
+      "name": "seq_values",
+      "values": [],
+      "transform": [
+        {"type": "formula", "as": "g0", "expr": "datum.g"},
+        {"type": "formula", "as": "g1", "expr": "datum.g+1"},
+        {"type": "formula", "as": "value", "expr": "datum.b"},
+        {"type": "formula", "as": "unit", "expr": "false"},
+        {
+          "type": "filter",
+          "expr": "(datum.g0 < gdom[1]) & (datum.g0 > gdom[0])"
+        }
+      ]
+    },
+    {"name": "gene_anchors", "values": []},
+    {
+      "name": "RNAB_summary_values",
+      "values": [],
+      "transform": [
+        {"type": "filter", "expr": "show_transcripts"},
+        {"type": "filter", "expr": "datum.variable==gene_clickedFilter"},
+        {"type": "formula", "as": "g0", "expr": "datum['g0']"},
+        {"type": "formula", "as": "v0", "expr": "datum['median']"},
+        {"type": "extent", "field": "v0", "signal": "rnab_minmax"},
+        {"type": "formula", "as": "unit", "expr": "datum['event']"}
+      ]
+    },
+    {
+      "name": "RNAB_summary_values_vis",
+      "source": "RNAB_summary_values",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "(datum.g0 < gdom[1]) & (datum.g0 > gdom[0])"
+        },
+        {"type": "extent", "field": "track", "signal": "rnab_track_minmax"}
+      ]
+    },
+    {
+      "name": "RNAB_summary_unit_domains",
+      "source": "RNAB_summary_values",
+      "transform": [
+        {"type": "filter", "expr": "isDefined(datum.unit)"},
+        {"type": "collect", "sort": {"field": "unit"}},
+        {"type": "aggregate", "groupby": ["unit"]}
+      ]
+    },
+    {
+      "name": "cage_summary_values",
+      "values": [],
+      "transform": [
+        {"type": "filter", "expr": "datum.variable==cage_clickedFilter"},
+        {"type": "formula", "as": "g1", "expr": "datum['g0']+100"},
+        {"type": "extent", "field": "v0", "signal": "cage_summary_maxmin"},
+        {"type": "formula", "as": "unit", "expr": "datum['event']"},
+        {"type": "collect", "sort": {"field": "unit"}}
+      ]
+    },
+    {
+      "name": "cage_summary_values_vis",
+      "source": "cage_summary_values",
+      "transform": [
+        {"type": "filter", "expr": "range<5000000"},
+        {"type": "formula", "as": "summaries", "expr": "''"},
+        {
+          "type": "filter",
+          "expr": "(datum.g0 < gdom[1]) & (datum.g0 > gdom[0])"
+        }
+      ]
+    },
+    {
+      "name": "cage_summary_unit_domains",
+      "source": "cage_summary_values",
+      "transform": [
+        {"type": "filter", "expr": "isDefined(datum.unit)"},
+        {"type": "collect", "sort": {"field": "unit"}},
+        {"type": "aggregate", "groupby": ["unit"]}
+      ]
+    },
+    {
+      "name": "cage_values",
+      "values": [],
+      "transform": [
+        {"type": "formula", "as": "unit", "expr": "datum[cage_clickedFilter]"},
+        {"type": "formula", "as": "g1", "expr": "datum['g0']+100"},
+        {"type": "extent", "field": "v0", "signal": "cage_maxmin"},
+        {"type": "formula", "as": "v1", "expr": "1"}
+      ]
+    },
+    {
+      "name": "cage_values_vis",
+      "source": "cage_values",
+      "transform": [
+        {"type": "filter", "expr": "cage_vis"},
+        {
+          "type": "filter",
+          "expr": "(datum.g0 < gdom[1]) & (datum.g0 > gdom[0])"
+        },
+        {"type": "collect", "sort": {"field": "unit"}},
+        {"type": "filter", "expr": "range<5000000"}
+      ]
+    },
+    {
+      "name": "cage_UIDs",
+      "source": "cage_values",
+      "transform": [
+        {"type": "collect", "sort": {"field": "unit"}},
+        {"type": "aggregate", "groupby": ["UID", "unit"]}
+      ]
+    },
+    {
+      "name": "show_cage_uids",
+      "source": "cage_UIDs",
+      "transform": [
+        {"type": "filter", "expr": "cage_show_individual"},
+        {"type": "filter", "expr": "cage_vis"}
+      ]
+    },
+    {
+      "name": "cage_unit_domains",
+      "source": "cage_values",
+      "transform": [
+        {"type": "filter", "expr": "cage_vis"},
+        {"type": "filter", "expr": "cage_show_individual"},
+        {"type": "filter", "expr": "isDefined(datum.unit)"},
+        {"type": "collect", "sort": {"field": "unit"}},
+        {"type": "aggregate", "groupby": ["unit"]}
+      ]
+    },
+    {
+      "name": "meth_summary_values",
+      "values": [],
+      "transform": [
+        {"type": "filter", "expr": "datum.variable==meth_clickedFilter"},
+        {"type": "formula", "as": "unit", "expr": "datum['event']"},
+        {"type": "collect", "sort": {"field": "unit"}}
+      ]
+    },
+    {
+      "name": "meth_summary_values_vis",
+      "source": "meth_summary_values",
+      "transform": [
+        {"type": "filter", "expr": "meth_vis"},
+        {"type": "filter", "expr": "range<5000000"},
+        {"type": "formula", "as": "summaries", "expr": "''"},
+        {"type": "formula", "as": "v0", "expr": "0.5"},
+        {
+          "type": "filter",
+          "expr": "(datum.g0 < gdom[1]) & (datum.g0 > gdom[0])"
+        },
+        {"type": "formula", "as": "g1", "expr": "datum.g0+100"}
+      ]
+    },
+    {
+      "name": "meth_values",
+      "values": [],
+      "transform": [
+        {"type": "filter", "expr": "meth_show_individual"},
+        {"type": "formula", "as": "unit", "expr": "datum[meth_clickedFilter]"}
+      ]
+    },
+    {
+      "name": "meth_values_vis",
+      "source": "meth_values",
+      "transform": [
+        {"type": "filter", "expr": "range<5000000"},
+        {"type": "filter", "expr": "meth_vis"},
+        {
+          "type": "filter",
+          "expr": "(datum.g0 < gdom[1]) & (datum.g0 > gdom[0])"
+        }
+      ]
+    },
+    {
+      "name": "meth_UIDs",
+      "source": "meth_values",
+      "transform": [
+        {"type": "filter", "expr": "meth_vis"},
+        {"type": "aggregate", "groupby": ["UID", "unit"]},
+        {"type": "collect", "sort": {"field": "unit"}}
+      ]
+    },
+    {
+      "name": "show_meth_uids",
+      "source": "meth_UIDs",
+      "transform": [{"type": "filter", "expr": "meth_show_individual"}]
+    },
+    {
+      "name": "meth_summary_unit_domains",
+      "source": "meth_summary_values",
+      "transform": [
+        {"type": "filter", "expr": "meth_vis"},
+        {"type": "filter", "expr": "isDefined(datum.unit)"},
+        {"type": "collect", "sort": {"field": "unit"}},
+        {"type": "aggregate", "groupby": ["unit"]}
+      ]
+    },
+    {"name": "gene_data", "url": "/public/res/genes.json"},
+    {"name": "geneDetail", "values": []},
+    {
+      "name": "cds",
+      "values": []
+    },
+    {
+      "name": "exons",
+      "values": [ ]
+    },
+    {
+      "name": "utrs",
+      "values": []
+    },
+    {
+      "name": "transcripts",
+      "values": []
+    },
+    {
+      "name": "win_genes",
+      "source": "gene_data",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "(datum.g38[0] < gdom[1]) & (datum.g38[1] > gdom[0])"
+        },
+        {"type": "extent", "field": "t", "signal": "genes_track_minmax"}
+      ]
+    },
+    {
+      "name": "win_transcripts",
+      "source": "transcripts",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "(datum.gfp < gdom[1]) & (datum.glp > gdom[0])"
+        },
+        {"type": "extent", "field": "track", "signal": "transcripts_track_minmax"}
+      ]
+    },
+    {
+      "name": "genetrack_num",
+      "transform": [
+        {
+          "type": "sequence",
+          "start": -1,
+          "stop": {"signal": "track_count"},
+          "as": "track"
+        }
+      ]
+    },
+    {"name": "brush_store"},
+    {
+      "name": "chromosomes",
+      "values": [
+        {"chr": "1", "gfp": 1, "glp": 250000000},
+        {"chr": "2", "gfp": 250000000, "glp": 495000000},
+        {"chr": "3", "gfp": 495000000, "glp": 695000000},
+        {"chr": "4", "gfp": 695000000, "glp": 890000000},
+        {"chr": "5", "gfp": 890000000, "glp": 1075000000},
+        {"chr": "6", "gfp": 1075000000, "glp": 1250000000},
+        {"chr": "7", "gfp": 1250000000, "glp": 1412000000},
+        {"chr": "8", "gfp": 1412000000, "glp": 1560000000},
+        {"chr": "9", "gfp": 1560000000, "glp": 1700000000},
+        {"chr": "10", "gfp": 1700000000, "glp": 1835000000},
+        {"chr": "11", "gfp": 1835000000, "glp": 1972000000},
+        {"chr": "12", "gfp": 1972000000, "glp": 2107000000},
+        {"chr": "13", "gfp": 2107000000, "glp": 2223000000},
+        {"chr": "14", "gfp": 2223000000, "glp": 2333000000},
+        {"chr": "15", "gfp": 2333000000, "glp": 2438000000},
+        {"chr": "16", "gfp": 2438000000, "glp": 2533000000},
+        {"chr": "17", "gfp": 2533000000, "glp": 2618000000},
+        {"chr": "18", "gfp": 2618000000, "glp": 2700000000},
+        {"chr": "19", "gfp": 2700000000, "glp": 2760000000},
+        {"chr": "20", "gfp": 2760000000, "glp": 2826000000},
+        {"chr": "21", "gfp": 2826000000, "glp": 2876000000},
+        {"chr": "22", "gfp": 2876000000, "glp": 2928000000},
+        {"chr": "X", "gfp": 2928000000, "glp": 3088000000},
+        {"chr": "Y", "gfp": 3088000000, "glp": 3148000000},
+        {"chr": "M", "gfp": 3148000000, "glp": 3148100000}
+      ]
+    },
+    {
+      "name": "vis_chr",
+      "source": "chromosomes",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "(datum.glp > gdom[0]) & (datum.gfp < gdom[1])"
+        }
+      ]
+    },
+    {
+      "name": "vis_genes",
+      "source": "win_genes",
+      "transform": [
+        {"type": "filter", "expr": "(gdom[1]-gdom[0] < max_gene_distance)"},
+        {"type": "extent", "field": "v0", "signal": "genes_minmax"},
+        {"type": "filter", "expr": "show_genes"}
+      ]
+    },
+    {
+      "name": "vis_transcripts",
+      "source": "win_transcripts",
+      "transform": [
+        {"type": "extent", "field": "v0", "signal": "transcripts_minmax"},
+        {"type": "filter", "expr": "show_transcripts"}
+      ]
+    },
+    {
+      "name": "vis_utrs",
+      "source": "utrs",
+      "transform": [{"type": "filter", "expr": "show_transcripts"}]
+    },
+    {
+      "name": "vis_exons",
+      "source": "exons",
+      "transform": [{"type": "filter", "expr": "show_transcripts"}]
+    },
+    {
+      "name": "vis_cds",
+      "source": "cds",
+      "transform": [{"type": "filter", "expr": "show_transcripts"}]
+    }
+  ],
+  "scales": [
+    {
+      "name": "pdom_scale",
+      "zero": false,
+      "type": "linear",
+      "domain": {"signal": "if(show_pdom,pdom,'null')"},
+      "range": "width"
+    },
+    {
+      "name": "selection_color_scale",
+      "type": "ordinal",
+      "range": {"scheme": "category20"},
+      "domain": ["Disease", "Sex", "Mutation", "Gene", "Pathology", ""]
+    },
+    {
+      "name": "rnab_unit_color_scale",
+      "type": "ordinal",
+      "range": {"scheme": "tableau10"},
+      "domain": {
+        "data": "RNAB_summary_unit_domains",
+        "field": "unit",
+        "sort": {"field": "unit"}
+      }
+    },
+    {
+      "name": "cage_unit_color_scale",
+      "type": "ordinal",
+      "range": {"scheme": "tableau10"},
+      "domain": {
+        "data": "cage_summary_unit_domains",
+        "field": "unit",
+        "sort": {"field": "unit"}
+      }
+    },
+    {
+      "name": "meth_unit_color_scale",
+      "type": "ordinal",
+      "range": {"scheme": "tableau10"},
+      "domain": {
+        "data": "meth_summary_unit_domains",
+        "field": "unit",
+        "sort": {"field": "unit"}
+      }
+    },
+    {
+      "name": "biotype_color_scale",
+      "type": "ordinal",
+      "range": {"scheme": "category20"},
+      "domain": [
+        "protein_coding",
+        "antisense",
+        "hemoglobin",
+        "lincRNA",
+        "miRNA",
+        "Other_ncRNA",
+        "rRNA",
+        "snoRNA",
+        "snRNA",
+        "Vault_RNA",
+        "non_coding"
+      ]
+    },
+    {
+      "name": "ideo_scale",
+      "zero": false,
+      "type": "linear",
+      "domain": {"data": "chromosomes", "field": "gfp"},
+      "range": "width"
+    },
+    {
+      "name": "gene_tracks_scale",
+      "type": "band",
+      "domain": {"field": "track", "data": "genetrack_num"},
+      "range": [0, {"signal": "genome_cell_height-label_height"}]
+    },
+    {
+      "name": "chr_scale",
+      "type": "ordinal",
+      "domain": {"data": "chromosomes", "field": "gfp"},
+      "range": {"data": "chromosomes", "field": "chr"}
+    },
+    {
+      "name": "chr_color_scale",
+      "type": "ordinal",
+      "range": {"scheme": "category20"},
+      "domain": {"data": "chromosomes", "field": "chr"}
+    },
+    {
+      "name": "seq_color_scale",
+      "type": "ordinal",
+      "range": {"scheme": "category20"},
+      "domain": ["A", "T", "C", "G"]
+    },
+    {
+      "name": "gdom_scale",
+      "zero": false,
+      "type": "linear",
+      "domain": {"signal": "gdom"},
+      "range": "width"
+    }
+  ],
+  "layout": {
+    "columns": 1,
+    "offset": 1,
+    "center": {"row": true, "column": true},
+    "bounds": "flush",
+    "align": "each"
+  },
+  "marks": [
+    {
+      "type": "group",
+      "zindex": 1,
+      "name": "logo",
+      "clip": true,
+      "encode": {
+        "update": {
+          "fill": {"value": "white"},
+          "height": {"value": 24},
+          "width": {"signal": "width"}
+        }
+      },
+      "marks": [
+        {
+          "type": "group",
+          "encode": {
+            "update": {
+              "fill": {"value": "white"},
+              "height": {"value": 24},
+              "width": {"signal": "width"}
+            }
+          },
+          "marks": [
+            {
+              "type": "text",
+              "clip": false,
+              "name": "Zoom",
+              "encode": {
+                "update": {
+                  "text": {"value": "Zoom"},
+                  "fontWeight": {"value": "bold"},
+                  "x": {"value": 0},
+                  "y": {"value": 20},
+                  "opacity": {"value": 0.7}
+                }
+              }
+            },
+            {
+              "type": "group",
+              "name": "zoom_in_rect",
+              "clip": true,
+              "encode": {
+                "update": {
+                  "x": {"value": 35},
+                  "y": {"value": 4},
+                  "fill": {"value": "#ccc"},
+                  "stroke": {"value": "#444"},
+                  "strokeWidth": {"value": 0.25},
+                  "cornerRadius": {"value": 5},
+                  "cursor": {"value": "zoom-in"},
+                  "height": {"value": 18},
+                  "width": {"value": 18},
+                  "opacity": {"value": 0.7}
+                },
+                "hover": {"fill": {"value": "#ffd600"}},
+                "exit": {"fill": {"value": "#ccc"}}
+              },
+              "marks": [
+                {
+                  "type": "text",
+                  "name": "zoom_in_rect",
+                  "encode": {
+                    "update": {
+                      "text": {"value": "➕"},
+                      "cursor": {"value": "zoom-in"},
+                      "x": {"value": 2},
+                      "y": {"value": 14}
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "name": "zoom_out_rect",
+              "clip": true,
+              "encode": {
+                "update": {
+                  "x": {"value": 60},
+                  "y": {"value": 4},
+                  "fill": {"value": "#ccc"},
+                  "stroke": {"value": "#444"},
+                  "strokeWidth": {"value": 0.25},
+                  "cursor": {"value": "zoom-out"},
+                  "cornerRadius": {"value": 5},
+                  "height": {"value": 18},
+                  "width": {"value": 18},
+                  "opacity": {"value": 0.7}
+                },
+                "hover": {"fill": {"value": "#ffd600"}},
+                "exit": {"fill": {"value": "#ccc"}}
+              },
+              "marks": [
+                {
+                  "type": "text",
+                  "clip": false,
+                  "name": "zoom_out_rect",
+                  "encode": {
+                    "update": {
+                      "text": {"value": "➖"},
+                      "cursor": {"value": "zoom-out"},
+                      "x": {"value": 2},
+                      "y": {"value": 14}
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "clip": false,
+              "name": "Directions",
+              "encode": {
+                "update": {
+                  "text": {
+                    "signal": "['Shift+Scroll Zooms', 'Click+Mouse Pans']"
+                  },
+                  "fontStyle": {"value": "italic"},
+                  "x": {"value": 160},
+                  "fontSize": {"value": 10},
+                  "y": {"value": 12},
+                  "opacity": {"value": 0.8}
+                }
+              }
+            },
+            {
+              "type": "image",
+              "clip": true,
+              "encode": {
+                "update": {
+                  "url": {
+                    "value": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAUCAYAAADoZO9yAAAACXBIWXMAAAsSAAALEgHS3X78AAADhklEQVRIx52WPagcVRTHf3fZ0sdbwYggTEam8CHCW0jQSt7Y+3iLIFgIGRuLabKlnZvWJpMUg91bQYKFxaYVkzcvlYZdGBtjijGTqWyCEwzaKMfC/yz3DfvWjwuXmXvuOfd8/c+51wEZMDazmC3DOZcAScfnnAuB0GN5DrgMFBvEY2BhZqUvZ2Zr3iEwBg42HNwfIXDQWy+AXeAU+Al4V0pHwL7oSK51zk2ATzq6c24MFGY2QYcZkMibTTPT18yMbgIzycban/Tp3vpL0bKefKF/pmKY+Er6E2g7oXMMCTfRPdq3oo082kgpY+DldOKcWzjnrDdb59xHSkF5Xt7MrGb7eBN4bGatJ9N2aRkKQKfAFeU16x3QerSM/z+eAhc98MeKJEAx0M9M35vy2meKBbbP/4XX20YpA0Za18JlAtQDr4xuS2GmKIyBP4FkL+TQlhSs3IyVi/+Dcr8K5/pOe6mszaymB5xSgFpIoPgm5y1b0toS82a5F/KOvDLhLNQ5sXdO0QNxIpnCA3RhZriudLywFcIKeyGHD77iCwH1mhQkwNGDR3z32nt87IfezNoN/aj0AerhI9Te3ynrGRIqLVMgsSUZcB24xiWbrRlXrvjx7s7B/VvP33j2ZNgCpE01y4Mo8YyYAxNFGqBMm2qRB1GoaIRyuk6baj7wjBjL49LMZsJId0i/bRc7L/7BsyfDq+qUtQfAqeQeeamYAuM8iEZeC5gqjcd5EIWDHph2gU+dc6UEupCOe4aMX3799/Uibaq5voXkOgcS7U396kybKkmbqkybKgYeA+HQu9D2gRvALeAHz8PrwIyVa7WOgSPg+w5LW0aWB9GsMzQPonpDU5wCrTMznHO1vPhAN+i6mdmSFjje0JzuPTzZObxz8wJpU7luIw+iAvhMc1fk20rTL8CpInFmDIWNi4rGC739kbtMYUte0UFdp10B9159+9fzIvGz0pkpekde0zzIg2iUNtWZShoK2QBfA795wPONwXtDJKqcD4HjDcaEwEuqhkkeRGOBPfHSGatXrcfAA+IbwMk5cyEFV9aSl2xe5BfuPzzZIQ+iWGkZK2Lvew7WHug75VNVEHkQzfMgSpysPTAz9w8vtAy46vOpJ5Sekljgm3b3kxzdV0PMvIb5tHtapE2VOIUsVO/YZkis98UZPhnTNa552lS1aKF3cdZd5Uima3xl2lQLgL8AuhbrS5ztOeEAAAAASUVORK5CYII="
+                  },
+                  "href": {"value": "https://www.rimod-ftd"},
+                  "x": {"signal": "width*0.95"},
+                  "height": {"value": 20},
+                  "opacity": {"value": 0.6}
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Genes LABLE",
+      "clip": true,
+      "type": "group",
+      "zindex": 1,
+      "encode": {
+        "update": {
+          "height": {"signal": "label_height"},
+          "width": {"signal": "width"}
+        }
+      },
+      "legends": [
+        {
+          "type": "symbol",
+          "direction": "horizontal",
+          "fill": "selection_color_scale",
+          "gridAlign": "each",
+          "cornerRadius": 6,
+          "columnPadding": 0,
+          "symbolSize": 0,
+          "encode": {
+            "title": {"update": {"fontSize": {"signal": "if(width<500,7,10)"}}},
+            "labels": {
+              "name": "gene_filterLegendlab",
+              "interactive": true,
+              "update": {
+                "fontWeight": [
+                  {"test": "gene_clickedFilter==datum.value", "value": "bold"},
+                  {"value": "normal"}
+                ],
+                "fill": [
+                  {
+                    "test": "gene_clickedFilter==datum.value",
+                    "value": "firebrick"
+                  },
+                  {"value": "#333"}
+                ],
+                "opacity": [
+                  {"test": "gene_clickedFilter==datum.value", "value": 0.75},
+                  {"value": 0.4}
+                ]
+              }
+            }
+          },
+          "clipHeight": {"signal": "label_height-8"},
+          "titleOrient": "left",
+          "title": "Group By",
+          "legendX": {"signal": "150"},
+          "legendY": {"signal": "7"},
+          "offset": 25,
+          "fillColor": "white",
+          "orient": "none"
+        }
+      ],
+      "marks": [
+        {
+          "type": "rect",
+          "style": "TrackLabel",
+          "encode": {
+            "update": {
+              "y": {"value": 5},
+              "height": {"signal": "label_height"},
+              "width": {"signal": "width"}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "style": "TrackLabelText",
+          "encode": {
+            "update": {
+              "text": {"value": "Genes/Transcripts"},
+              "y": {"signal": "label_height+2"}
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "clip": false,
+      "style": "Track",
+      "name": "GENE_TRACK",
+      "layout": {
+        "columns": 1,
+        "padding": {"row": 0, "column": 0},
+        "center": {"row": true, "column": true},
+        "bounds": "flush",
+        "align": "each"
+      },
+      "zindex": 0,
+      "encode": {
+        "enter": {"fill": {"value": "white"}},
+        "update": {
+          "height": {"signal": "genome_cell_height-label_height"},
+          "width": {"signal": "width"}
+        }
+      },
+      "legends": [
+        {
+          "type": "symbol",
+          "direction": "vertical",
+          "zindex": 1,
+          "fill": "rnab_unit_color_scale",
+          "gridAlign": "each",
+          "cornerRadius": 6,
+          "padding": 5,
+          "symbolSize": 50,
+          "strokeColor": "firebrick",
+          "encode": {
+            "title": {"update": {"fontSize": {"value": 10}}},
+            "labels": {
+              "name": "scrn_unit_color_scale",
+              "interactive": true,
+              "update": {
+                "opacity": {"value": 0.5},
+                "fontWeight": [{"value": "bold"}]
+              }
+            },
+            "legend": {
+              "update": {"opacity": {"value": 0.7}, "dx": {"value": -25}}
+            }
+          },
+          "titleOrient": "top",
+          "title": "Disease",
+          "orient": "bottom-right",
+          "fillColor": "white"
+        }
+      ],
+      "data": [],
+      "signals": [],
+      "marks": [
+        {
+          "type": "group",
+          "clip": false,
+          "name": "genome_track",
+          "encode": {
+            "update": {
+              "height": {"signal": "genome_cell_height"},
+              "strokeWidth": {"value": 1},
+              "cornerRadius": {"value": 2},
+              "width": {"signal": "width"}
+            }
+          },
+          "axes": [
+            {
+              "domain": false,
+              "scale": "gene_tracks_scale",
+              "gridScale": "gdom_scale",
+              "zindex": 1,
+              "orient": "left",
+              "bandPosition": 0.99,
+              "grid": false,
+              "tickCount": 4,
+              "ticks": false,
+              "labels": false
+            }
+          ],
+          "marks": [
+            {
+              "name": "vis_genes_mark",
+              "type": "rect",
+              "interactive": true,
+              "clip": true,
+              "from": {"data": "vis_genes"},
+              "encode": {
+                "update": {
+                  "fill": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "y": {"scale": "gene_tracks_scale", "field": "t"},
+                  "height": {"scale": "gene_tracks_scale", "band": 0.4},
+                  "href": {"signal": "'/private#Genepage?gene='+datum.gene"},
+                  "tooltip": {"signal": "datum"},
+                  "#tooltip": {"signal": "{'Gene':datum.gene}"},
+                  "cornerRadius": [
+                    {
+                      "value": 1,
+                      "test": "(datum.g38[1]-datum.g38[0])/(gdom[1]-gdom[0])>0.01"
+                    },
+                    {"value": 0}
+                  ],
+                  "x": {"field": "g38[1]", "scale": "gdom_scale"},
+                  "x2": {"field": "g38[0]", "scale": "gdom_scale"}
+                }
+              }
+            },
+            {
+              "from": {"data": "vis_genes"},
+              "type": "text",
+              "interactive": true,
+              "clip": true,
+              "encode": {
+                "update": {
+                  "fill": {"value": "maroon"},
+                  "text": [{"test": "show_genenames", "field": "gene"}],
+                  "href": {"signal": "'/private?gene='+datum.gene+'#Genes'"},
+                  "opacity": {"value": 0.5},
+                  "dx": {"value": 2},
+                  "dy": {"value": 2},
+                  "#tooltip": {"signal": "datum"},
+                  "tooltip": {
+                    "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
+                  },
+                  "align": {"value": "left"},
+                  "baseline": {"value": "middle"},
+                  "fontSize": {"value": 8},
+                  "x": {"field": "g38[1]", "scale": "gdom_scale"},
+                  "y": {"field": "t", "scale": "gene_tracks_scale", "band": 0.4}
+                }
+              }
+            },
+            {
+              "name": "transcripts_mark",
+              "type": "rect",
+              "interactive": true,
+              "clip": true,
+              "from": {"data": "vis_transcripts"},
+              "encode": {
+                "update": {
+                  "zindex": {"value": 0},
+                  "fill": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "stroke": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "fillOpacity": {"value": 1},
+                  "strokeWidth": {"value": 1},
+                  "#tooltip": {"signal": "datum"},
+                  "tooltip": {
+                    "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
+                  },
+                  "href": {"signal": "'/private?gene='+datum.gene+'#Genepage'"},
+                  "cornerRadius": [
+                    {"value": 1, "test": "(gdom[1]-gdom[0])<10000"},
+                    {"value": 0}
+                  ],
+                  "x": {"field": "gfp", "scale": "gdom_scale"},
+                  "x2": {"field": "glp", "scale": "gdom_scale"},
+                  "y": {
+                    "field": "track",
+                    "scale": "gene_tracks_scale",
+                    "band": 0.4
+                  },
+                  "height": {"scale": "gene_tracks_scale", "band": 0.15}
+                }
+              }
+            },
+            {
+              "from": {"data": "vis_transcripts"},
+              "type": "text",
+              "interactive": true,
+              "clip": true,
+              "encode": {
+                "update": {
+                  "fill": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "#2e4f4e"}
+                  ],
+                  "text": [
+                    {
+                      "test": "data('vis_transcripts').length<50 && show_transcripts",
+                      "signal": "datum.gene"
+                    }
+                  ],
+                  "opacity": [
+                    {"test": "datum.gene==selected.gene", "value": 0.7},
+                    {"value": 0.6}
+                  ],
+                  "dx": {"value": 2},
+                  "dy": {"value": 0},
+                  "#tooltip": {"signal": "datum"},
+                  "tooltip": {
+                    "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
+                  },
+                  "align": {"value": "left"},
+                  "href": {"signal": "'/private?gene='+datum.gene+'#Gene'"},
+                  "baseline": {"value": "middle"},
+                  "fontSize": [
+                    {"test": "datum.gene==selected.gene", "value": 9},
+                    {"value": 8}
+                  ],
+                  "fontWeight": [
+                    {"test": "datum.gene==selected.gene", "value": "bold"},
+                    {"value": "normal"}
+                  ],
+                  "x": {"field": "glp", "scale": "gdom_scale"},
+                  "y": {
+                    "field": "track",
+                    "scale": "gene_tracks_scale",
+                    "band": 0.4
+                  }
+                }
+              }
+            },
+            {
+              "type": "rect",
+              "clip": true,
+              "interactive": true,
+              "from": {"data": "vis_utrs"},
+              "name": "utrs_marks",
+              "encode": {
+                "update": {
+                  "fill": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "stroke": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "fillOpacity": {"value": 1},
+                  "strokeWidth": {"value": 1},
+                  "cornerRadius": [
+                    {"value": 1, "test": "(gdom[1]-gdom[0])<10000"},
+                    {"value": 0}
+                  ],
+                  "#tooltip": {"signal": "datum"},
+                  "tooltip": {
+                    "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
+                  },
+                  "x": {"field": "gfp", "scale": "gdom_scale"},
+                  "x2": {"field": "glp", "scale": "gdom_scale"},
+                  "y": [
+                    {
+                      "field": "genetrack",
+                      "scale": "gene_tracks_scale",
+                      "test": "!show_transcripts",
+                      "band": 0.2
+                    },
+                    {
+                      "field": "track",
+                      "scale": "gene_tracks_scale",
+                      "band": 0.2
+                    }
+                  ],
+                  "height": {"scale": "gene_tracks_scale", "band": 0.6}
+                }
+              }
+            },
+            {
+              "name": "exons_mark",
+              "type": "rect",
+              "clip": true,
+              "from": {"data": "vis_exons"},
+              "interactive": true,
+              "encode": {
+                "update": {
+                  "x": {"field": "gfp", "scale": "gdom_scale"},
+                  "x2": {"field": "glp", "scale": "gdom_scale"},
+                  "y": [
+                    {
+                      "test": "show_transcripts",
+                      "field": "track",
+                      "scale": "gene_tracks_scale",
+                      "band": 0.4
+                    },
+                    {
+                      "field": "genetrack",
+                      "scale": "gene_tracks_scale",
+                      "band": 0.4
+                    }
+                  ],
+                  "#tooltip": {"signal": "datum"},
+                  "tooltip": {
+                    "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
+                  },
+                  "height": {"band": 0.2, "scale": "gene_tracks_scale"},
+                  "fill": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "stroke": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "fillOpacity": {"value": 1},
+                  "strokeWidth": {"value": 1},
+                  "cornerRadius": [
+                    {"value": 1, "test": "(datum.glp-datum.gfp)/range*500>1"},
+                    {"value": 0}
+                  ]
+                }
+              }
+            },
+            {
+              "name": "cds_mark",
+              "type": "rect",
+              "clip": true,
+              "from": {"data": "vis_cds"},
+              "interactive": true,
+              "encode": {
+                "update": {
+                  "x": {"field": "gfp", "scale": "gdom_scale"},
+                  "x2": {"field": "glp", "scale": "gdom_scale"},
+                  "y": [
+                    {
+                      "test": "show_transcripts",
+                      "field": "track",
+                      "scale": "gene_tracks_scale",
+                      "band": 0.1
+                    },
+                    {
+                      "field": "genetrack",
+                      "scale": "gene_tracks_scale",
+                      "band": 0.1
+                    }
+                  ],
+                  "tooltip": {
+                    "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
+                  },
+                  "height": {"band": 0.8, "scale": "gene_tracks_scale"},
+                  "fill": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "stroke": [
+                    {"test": "datum.gene==selected.gene", "value": "firebrick"},
+                    {"value": "steelblue"}
+                  ],
+                  "fillOpacity": {"value": 1},
+                  "strokeWidth": {"value": 1},
+                  "cornerRadius": [
+                    {"value": 1, "test": "(datum.glp-datum.gfp)/range*500>1"},
+                    {"value": 0}
+                  ]
+                }
+              }
+            },
+            {
+              "type": "symbol",
+              "clip": true,
+              "interactive": true,
+              "from": {"data": "vis_transcripts"},
+              "name": "directiontranscripts",
+              "encode": {
+                "update": {
+                  "shape": [
+                    {"test": "datum.dir=='+'", "value": "triangle-right"},
+                    {"value": "triangle-left"}
+                  ],
+                  "size": {"value": 70},
+                  "x": {
+                    "signal": "[datum.gfp+(datum.glp-datum.gfp)/2]",
+                    "scale": "gdom_scale"
+                  },
+                  "y": [
+                    {
+                      "test": "show_transcripts",
+                      "band": 0.5,
+                      "field": "track",
+                      "scale": "gene_tracks_scale"
+                    },
+                    {
+                      "field": "genetrack",
+                      "scale": "gene_tracks_scale",
+                      "band": 0.5
+                    }
+                  ],
+                  "fill": [{"value": "#6b8091"}]
+                }
+              }
+            },
+            {
+              "type": "group",
+              "name": "brna",
+              "clip": true,
+              "from": {
+                "facet": {
+                  "data": "RNAB_summary_values_vis",
+                  "name": "myfacet",
+                  "groupby": ["track", "g0", "gene"]
+                }
+              },
+              "zindex": 1,
+              "encode": {
+                "update": {
+                  "y": {"scale": "gene_tracks_scale", "field": "track"},
+                  "x": {"signal": "scale('gdom_scale',datum.g0)-20"},
+                  "width": {"signal": "60"},
+                  "fill": {"value": "white"},
+                  "opacity": {"value": 1},
+                  "height": {"scale": "gene_tracks_scale", "band": 4}
+                }
+              },
+              "axes": [
+                {
+                  "domain": true,
+                  "scale": "yinner",
+                  "title": {"signal": "['RNA Counts',parent.gene]"},
+                  "gridScale": "xinner2",
+                  "orient": "left",
+                  "offset": -30,
+                  "encode": {
+                    "labels": {
+                      "update": {
+                        "fontWeight": {"value": "bold"},
+                        "fontSize": {"value": 8}
+                      }
+                    },
+                    "title": {
+                      "update": {
+                        "fontWeight": {"value": "bold"},
+                        "fontSize": {"value": 8}
+                      }
+                    }
+                  },
+                  "tickCount": 2,
+                  "grid": true,
+                  "ticks": false,
+                  "labels": true
+                },
+                {
+                  "domain": true,
+                  "scale": "xinner2",
+                  "gridScale": "yinner",
+                  "orient": "bottom",
+                  "labels": false,
+                  "encode": {
+                    "labels": {
+                      "update": {
+                        "fontWeight": {"value": "bold"},
+                        "fontSize": {"value": 8}
+                      }
+                    }
+                  },
+                  "ticks": false,
+                  "grid": false
+                }
+              ],
+              "scales": [
+                {
+                  "name": "xinner2",
+                  "type": "band",
+                  "range": [{"signal": "30"}, {"signal": "60"}],
+                  "domain": {
+                    "data": "RNAB_summary_unit_domains",
+                    "field": "unit"
+                  }
+                },
+                {
+                  "name": "yinner",
+                  "type": "linear",
+                  "reverse": false,
+                  "zero": true,
+                  "range": [
+                    {"signal": "bandwidth('gene_tracks_scale')*4"},
+                    {"signal": "bandwidth('gene_tracks_scale')"}
+                  ],
+                  "domain": {"data": "myfacet", "field": "v0"}
+                }
+              ],
+              "marks": [
+                {
+                  "type": "rect",
+                  "name": "shading",
+                  "from": {"data": "myfacet"},
+                  "interactive": true,
+                  "encode": {
+                    "update": {
+                      "tooltip": {"signal": "datum"},
+                      "x": {"scale": "xinner2", "field": "unit"},
+                      "width": {"scale": "xinner2", "band": 1},
+                      "cornerRadiusTopLeft": {"value": 2},
+                      "cornerRadiusTopRight": {"value": 2},
+                      "y": {"scale": "yinner", "value": "0"},
+                      "y2": {"scale": "yinner", "field": "v0"},
+                      "opacity": {"value": 0.75},
+                      "fill": {
+                        "field": "unit",
+                        "scale": "rnab_unit_color_scale"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CAGE LABLE",
+      "type": "group",
+      "clip": true,
+      "zindex": 1,
+      "encode": {
+        "update": {
+          "height": {"signal": "if(cage_vis,label_height,0)"},
+          "width": {"signal": "width"}
+        }
+      },
+      "legends": [
+        {
+          "type": "symbol",
+          "direction": "horizontal",
+          "fill": "selection_color_scale",
+          "gridAlign": "each",
+          "cornerRadius": 6,
+          "symbolSize": 0,
+          "columnPadding": 0,
+          "encode": {
+            "title": {"update": {"fontSize": {"value": 9}}},
+            "labels": {
+              "name": "cage_filterLegendlab",
+              "interactive": true,
+              "update": {
+                "fontWeight": [
+                  {"test": "cage_clickedFilter==datum.value", "value": "bold"},
+                  {"value": "normal"}
+                ],
+                "fill": [
+                  {
+                    "test": "cage_clickedFilter==datum.value",
+                    "value": "firebrick"
+                  },
+                  {"value": "#333"}
+                ],
+                "opacity": [
+                  {"test": "cage_clickedFilter==datum.value", "value": 0.75},
+                  {"value": 0.4}
+                ]
+              }
+            }
+          },
+          "clipHeight": {"signal": "label_height-8"},
+          "titleOrient": "left",
+          "title": "Group By",
+          "legendX": {"signal": "150"},
+          "legendY": {"signal": "7"},
+          "offset": 25,
+          "fillColor": "white",
+          "orient": "none"
+        }
+      ],
+      "marks": [
+        {
+          "type": "rect",
+          "style": "TrackLabel",
+          "encode": {
+            "update": {
+              "y": {"value": 5},
+              "height": {"signal": "label_height"},
+              "width": {"signal": "width"}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "style": "TrackLabelText",
+          "encode": {
+            "update": {
+              "text": {"value": "CAGE"},
+              "y": {"signal": "label_height"}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "style": "TrackButton",
+          "encode": {
+            "update": {
+              "y": {"signal": "7"},
+              "height": {"signal": "label_height-5"},
+              "width": {"signal": "130"},
+              "x": {"signal": "width-150"},
+              "fill": {"signal": "'white'"},
+              "cornerRadius": {"value": 5}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "style": "TrackButtonText",
+          "name": "Show_Individual_CAGE",
+          "encode": {
+            "update": {
+              "text": {
+                "signal": "if(cage_show_individual,'⇲ Hide Individual-level','⇲ Show Individual-Level')"
+              },
+              "fill": {"value": "#444"},
+              "y": {"signal": "label_height-2"},
+              "x": {"signal": "width-25"}
+            },
+            "hover": {"fill": {"value": "#ffd600"}}
+          }
+        },
+        {
+          "type": "text",
+          "style": "HideButton",
+          "name": "Hide_CAGE_Button",
+          "encode": {
+            "update": {
+              "text": {"signal": "if(cage_vis,'☒','')"},
+              "y": {"signal": "label_height"},
+              "x": {"signal": "width-1"},
+              "fill": {"value": "white"}
+            },
+            "hover": {"fill": {"value": "#ffd600"}}
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "style": "Track",
+      "name": "CAGE Summary",
+      "clip": true,
+      "zindex": 0,
+      "encode": {
+        "update": {
+          "height": {"signal": "if(cage_vis,cage_height,0)"},
+          "width": {"signal": "width"}
+        }
+      },
+      "signals": [
+
+        {"name": "cage_palette", "value": "lightmulti"}
+      ],
+      "scales": [
+        {
+          "name": "cage_summary_unit_yscalep",
+          "type": "band",
+          "align": 1,
+          "domain": {
+            "data": "cage_summary_unit_domains",
+            "field": "unit",
+            "sort": {"order": "ascending", "field": "unit"}
+          },
+          "range": [{"signal": "0"}, {"signal": "cage_height"}]
+        },
+        {
+          "name": "cage_summary_unit_yscale",
+          "type": "band",
+          "align": 0,
+          "domain": {
+            "signal": "if(cage_vis&data('cage_summary_unit_domains').length>0,domain('cage_summary_unit_yscalep'),[])",
+            "sort": {"order": "ascending", "field": "unit"}
+          },
+          "range": [{"signal": "0"}, {"signal": "cage_height"}]
+        }
+      ],
+      "axes": [
+        {
+          "domain": false,
+          "scale": "cage_summary_unit_yscale",
+          "gridScale": "gdom_scale",
+          "zindex": 1,
+          "orient": "left",
+          "bandPosition": 0.99,
+          "encode": {
+            "labels": {
+              "interactive": true,
+              "z-index": {"value": 9},
+              "update": {
+                "fill": {"value": "black"},
+                "align": {"value": "left"},
+                "fontWeight": {"value": "bold"},
+                "dx": {"value": 5},
+                "dy": {"value": 0}
+              }
+            }
+          },
+          "grid": true,
+          "tickCount": 4,
+          "ticks": false,
+          "labels": true
+        }
+      ],
+      "marks": [
+        {
+          "type": "rect",
+          "from": {"data": "cage_summary_unit_domains"},
+          "interactive": true,
+          "encode": {
+            "update": {
+              "y": {
+                "scale": "cage_summary_unit_yscale",
+                "band": 0,
+                "field": "unit"
+              },
+              "fill": {"field": "unit", "scale": "cage_unit_color_scale"},
+              "opacity": {"value": 0.1},
+              "width": {"signal": "width"},
+              "tooltips": {"signal": "datum"},
+              "height": {"scale": "cage_summary_unit_yscale", "band": 1}
+            }
+          }
+        },
+        {
+          "type": "group",
+          "clip": true,
+          "from": {
+            "facet": {
+              "data": "cage_summary_values_vis",
+              "name": "myfacet",
+              "groupby": ["unit"]
+            }
+          },
+          "encode": {
+            "update": {
+              "yc": {"scale": "cage_summary_unit_yscalep", "field": "unit"},
+              "width": {"signal": "width"},
+              "height": {"scale": "cage_summary_unit_yscalep", "band": 0}
+            }
+          },
+          "axes": [
+            {
+              "domain": false,
+              "scale": "cage_summary_unit_yscale",
+              "bandPosition": 0,
+              "grid": false,
+              "gridScale": "gdom_scale",
+              "orient": "left",
+              "ticks": false,
+              "labels": false
+            }
+          ],
+          "scales": [
+            {
+              "name": "yinner",
+              "type": "linear",
+              "reverse": true,
+              "range": [
+                {"signal": "0"},
+                {"signal": "bandwidth('cage_summary_unit_yscalep')"}
+              ],
+              "domain": [1, {"signal": "cage_summary_max"}]
+            }
+          ],
+          "marks": [
+            {
+              "type": "rect",
+              "name": "shading",
+              "from": {"data": "myfacet"},
+              "interactive": true,
+              "encode": {
+                "update": {
+                  "tooltip": {"signal": "datum"},
+                  "x": {"scale": "gdom_scale", "field": "g0"},
+                  "x2": {"scale": "gdom_scale", "field": "g1"},
+                  "y": {"scale": "yinner", "value": "1"},
+                  "y2": {"scale": "yinner", "field": "v0"},
+                  "stroke": {"scale": "cage_unit_color_scale", "field": "unit"},
+                  "strokeWidth": {"value": 1},
+                  "fill": {"scale": "cage_unit_color_scale", "field": "unit"}
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CAGE LABEL Individual",
+      "type": "group",
+      "clip": true,
+      "zindex": 1,
+      "encode": {
+        "update": {
+          "height": {
+            "signal": "if(cage_vis,min(cage_ind_height,label_height),0)"
+          },
+          "fill": {"value": "black"},
+          "opacity": {"value": 0.1},
+          "width": {"signal": "width"}
+        }
+      },
+      "marks": []
+    },
+    {
+      "type": "group",
+      "name": "CAGE",
+      "clip": true,
+      "style": "Track",
+      "zindex": 1,
+      "encode": {
+        "update": {
+          "height": {"signal": "if(cage_vis,cage_ind_height,0)"},
+          "width": {"signal": "width"}
+        }
+      },
+      "layout": {
+        "columns": 1,
+        "offset": 1,
+        "center": {"row": true, "column": true},
+        "bounds": "flush",
+        "align": "each"
+      },
+      "signals": [
+        {"name": "cage_min", "update": "0"},
+        {
+          "name": "cage_max",
+          "update": "if(isDefined(cage_maxmin[1]),max(100,cage_maxmin[1]),100)"
+        },
+        {"name": "cage_palette", "value": "lightgreyred"},
+        {"name": "cage_boxes", "value": true},
+        {"name": "cage_columns", "value": false},
+        {"name": "cage_opacity", "value": true},
+        {"name": "cage_gradiant", "value": true},
+        {"name": "cage_points", "value": true}
+      ],
+      "scales": [
+        {
+          "name": "cage_gradiantscale",
+          "range": {"scheme": "lightgreyred"},
+          "type": "linear",
+          "domain": [{"signal": "cage_min"}, {"signal": "500"}]
+        },
+        {
+          "name": "cage_bed_opacityscale",
+          "range": [0.2, 1],
+          "zero": true,
+          "type": "linear",
+          "domain": [{"signal": "0"}, {"signal": "500"}]
+        },
+        {
+          "name": "cage_unit_yscale",
+          "type": "band",
+          "align": 1,
+          "domain": {
+            "data": "show_cage_uids",
+            "field": "UID",
+            "sort": {"field": "UID"}
+          },
+          "range": [{"signal": "0"}, {"signal": "cage_ind_height"}]
+        }
+      ],
+      "axes": [
+        {
+          "domain": false,
+          "scale": "cage_unit_yscale",
+          "gridScale": "gdom_scale",
+          "zindex": 1,
+          "orient": "left",
+          "bandPosition": 0.99,
+          "encode": {
+            "labels": {
+              "interactive": true,
+              "z-index": {"value": 9},
+              "update": {
+                "fill": {"value": "black"},
+                "align": {"value": "left"},
+                "dx": {"value": 5},
+                "dy": {"value": 0}
+              }
+            }
+          },
+          "grid": false,
+          "tickCount": 4,
+          "ticks": false,
+          "labels": true
+        }
+      ],
+      "data": [],
+      "marks": [
+        {
+          "type": "rect",
+          "from": {"data": "show_cage_uids"},
+          "interactive": true,
+          "encode": {
+            "update": {
+              "y": {"scale": "cage_unit_yscale", "band": 0, "field": "UID"},
+              "fill": {"field": "unit", "scale": "cage_unit_color_scale"},
+              "opacity": {"value": 0.1},
+              "stroke":{"value":"gray"},
+              "width": {"signal": "width"},
+              "tooltips": {"signal": "datum"},
+              "height": {"scale": "cage_unit_yscale", "band": 1}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "name": "__banded_tracks",
+          "from": {"data": "cage_values_vis"},
+          "clip": false,
+          "interactive": true,
+          "encode": {
+            "update": {
+              "x": {"scale": "gdom_scale", "field": "g0"},
+              "x2": {"scale": "gdom_scale", "field": "g1"},
+              "tooltip": {"signal": "datum"},
+              "opacity":{"value":0.8},
+              "y2": {"scale": "cage_unit_yscale", "field": "UID", "band": 1},
+               "height": { "signal":"bandwidth('cage_unit_yscale')/2*datum.v0/cage_summary_maxmin[1]"},
+              "fill": {"field": "unit", "scale": "cage_unit_color_scale"}
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "METH LABEL",
+      "type": "group",
+      "clip": true,
+      "zindex": 1,
+      "encode": {
+        "update": {
+          "height": {"signal": "if(meth_vis,label_height,0)"},
+          "width": {"signal": "width"}
+        }
+      },
+      "legends": [
+        {
+          "type": "symbol",
+          "direction": "horizontal",
+          "fill": "selection_color_scale",
+          "gridAlign": "each",
+          "cornerRadius": 6,
+          "symbolSize": 0,
+          "columnPadding": 0,
+          "encode": {
+            "title": {"update": {"fontSize": {"value": 9}}},
+            "labels": {
+              "name": "meth_filterLegendlab",
+              "interactive": true,
+              "update": {
+                "fontWeight": [
+                  {"test": "meth_clickedFilter==datum.value", "value": "bold"},
+                  {"value": "normal"}
+                ],
+                "fill": [
+                  {
+                    "test": "meth_clickedFilter==datum.value",
+                    "value": "firebrick"
+                  },
+                  {"value": "#333"}
+                ],
+                "opacity": [
+                  {"test": "meth_clickedFilter==datum.value", "value": 0.75},
+                  {"value": 0.4}
+                ]
+              }
+            }
+          },
+          "clipHeight": {"signal": "label_height-8"},
+          "titleOrient": "left",
+          "title": "Group By",
+          "legendX": {"signal": "150"},
+          "legendY": {"signal": "7"},
+          "offset": 25,
+          "fillColor": "white",
+          "orient": "none"
+        }
+      ],
+      "marks": [
+        {
+          "type": "rect",
+          "style": "TrackLabel",
+          "encode": {
+            "update": {
+              "y": {"value": 5},
+              "height": {"signal": "label_height"},
+              "width": {"signal": "width"}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "style": "TrackLabelText",
+          "encode": {
+            "update": {
+              "text": {"value": "Methylation Arrays"},
+              "y": {"signal": "label_height"}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "style": "TrackButton",
+          "encode": {
+            "update": {
+              "y": {"signal": "7"},
+              "height": {"signal": "label_height-5"},
+              "width": {"signal": "130"},
+              "x": {"signal": "width-150"},
+              "fill": {"signal": "'white'"},
+              "cornerRadius": {"value": 5}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "style": "TrackButtonText",
+          "name": "Show_Individual_METH",
+          "encode": {
+            "update": {
+              "text": {
+                "signal": "if(meth_show_individual,'⇲ Hide Individual-level','⇲ Show Individual-Level')"
+              },
+              "fill": {"value": "#444"},
+              "y": {"signal": "label_height-2"},
+              "x": {"signal": "width-25"}
+            },
+            "hover": {"fill": {"value": "#ffd600"}}
+          }
+        },
+        {
+          "type": "text",
+          "style": "HideButton",
+          "name": "Hide_METH_Button",
+          "encode": {
+            "update": {
+              "text": {"signal": "if(meth_vis,'☒','')"},
+              "y": {"signal": "label_height"},
+              "x": {"signal": "width-1"},
+              "fill": {"value": "white"}
+            },
+            "hover": {"fill": {"value": "#ffd600"}}
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "style": "Track",
+      "name": "METH Summary",
+      "clip": true,
+      "zindex": 0,
+      "encode": {
+        "update": {
+          "height": {"signal": "meth_height"},
+          "width": {"signal": "width"}
+        }
+      },
+      "signals": [
+        {"name": "meth_min", "update": "0"},
+        {"name": "meth_max", "update": "1"},
+        {"name": "meth_palette", "value": "turbo"}
+      ],
+      "scales": [
+        {
+          "name": "meth_gradiantscale",
+          "range": {"scheme": {"signal": "'lightgreyred'"}},
+          "type": "quantize",
+          "domainMin": 0,
+          "domainMax": 1,
+          "domain": [{"signal": "meth_min"}, {"signal": "meth_max"}]
+        },
+        {
+          "name": "meth_opacityscale",
+          "range": [0.5, 1],
+          "type": "linear",
+          "domain": [{"signal": "meth_min"}, {"signal": "meth_max"}]
+        },
+        {
+          "name": "meth_unit_yscalep",
+          "type": "band",
+          "align": 1,
+          "domain": {
+            "data": "meth_summary_unit_domains",
+            "field": "unit",
+            "sort": true
+          },
+          "range": [{"signal": "0"}, {"signal": "meth_height"}]
+        },
+        {
+          "name": "meth_unit_yscale",
+          "type": "band",
+          "domain": {
+            "signal": "if(meth_vis&data('meth_summary_unit_domains').length>0,domain('meth_unit_yscalep'),[])",
+            "sort": {"order": "ascending"}
+          },
+          "range": [{"signal": "0"}, {"signal": "meth_height"}]
+        }
+      ],
+      "axes": [
+        {
+          "domain": false,
+          "scale": "meth_unit_yscale",
+          "gridScale": "gdom_scale",
+          "zindex": 1,
+          "orient": "left",
+          "bandPosition": 0.99,
+          "encode": {
+            "labels": {
+              "interactive": true,
+              "z-index": {"value": 99999},
+              "update": {
+                "fill": {"value": "black"},
+                "align": {"value": "left"},
+                "fontWeight": {"value": "bold"},
+                "dx": {"value": 5},
+                "dy": {"value": 0}
+              }
+            }
+          },
+          "grid": true,
+          "tickCount": 4,
+          "ticks": false,
+          "labels": true
+        }
+      ],
+      "marks": [
+        {
+          "type": "rect",
+          "from": {"data": "meth_summary_unit_domains"},
+          "interactive": true,
+          "encode": {
+            "update": {
+              "y": {"scale": "meth_unit_yscale", "band": 0, "field": "unit"},
+              "x": {"value": 0},
+              "fill": {"field": "unit", "scale": "meth_unit_color_scale"},
+              "opacity": {"value": 0.1},
+              "width": {"signal": "width"},
+              "tooltips": {"signal": "datum"},
+              "height": {"scale": "meth_unit_yscale", "band": 1}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "name": "shading",
+          "from": {"data": "meth_summary_values_vis"},
+          "interactive": true,
+          "encode": {
+            "update": {
+              "tooltip": {"signal": "datum"},
+              "x": {"scale": "gdom_scale", "field": "g0"},
+              "width": {"value": 3},
+              "y2": {"scale": "meth_unit_yscale", "field": "unit", "band": 1},
+              "height": { "signal":"bandwidth('meth_unit_yscale')/2*datum.median"},
+              "fillOpacity": {"value": 1},
+              "fill": {"scale": "meth_gradiantscale", "field": "median"}
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "name": "Individual METH",
+      "clip": true,
+      "style": "Track",
+      "zindex": 1,
+      "encode": {
+        "update": {
+          "height": {"signal": "if(meth_vis,meth_ind_height,0)"},
+          "width": {"signal": "width"}
+        }
+      },
+      "layout": {
+        "columns": 1,
+        "offset": 1,
+        "center": {"row": true, "column": true},
+        "bounds": "flush",
+        "align": "each"
+      },
+      "signals": [
+        {"name": "meth_min", "update": "0"},
+        {"name": "meth_max", "update": "1"},
+        {"name": "meth_palette", "value": "lightgreyred"},
+        {"name": "meth_boxes", "value": true},
+        {"name": "meth_columns", "value": false},
+        {"name": "meth_opacity", "value": true},
+        {"name": "meth_gradiant", "value": true},
+        {"name": "meth_points", "value": true}
+      ],
+      "scales": [
+        {
+          "name": "meth_gradiantscale",
+          "range": {"scheme": "lightgreyred"},
+          "type": "linear",
+          "domain": [{"signal": "0"}, {"signal": "1"}]
+        },
+        {
+          "name": "meth_bed_opacityscale",
+          "range": [0.2, 1],
+          "zero": true,
+          "type": "linear",
+          "domain": [0, 1]
+        },
+        {
+          "name": "meth_unit_yscale",
+          "type": "band",
+          "align": 1,
+          "domain": {"data": "show_meth_uids", "field": "UID"},
+          "range": [{"signal": "0"}, {"signal": "meth_ind_height"}]
+        }
+      ],
+      "axes": [
+        {
+          "domain": false,
+          "scale": "meth_unit_yscale",
+          "gridScale": "gdom_scale",
+          "zindex": 1,
+          "orient": "left",
+          "bandPosition": 0.99,
+          "encode": {
+            "labels": {
+              "interactive": true,
+              "z-index": {"value": 9},
+              "update": {
+                "fill": {"value": "black"},
+                "align": {"value": "left"},
+                "dx": {"value": 5},
+                "dy": {"value": 0}
+              }
+            }
+          },
+          "grid": false,
+          "tickCount": 4,
+          "ticks": false,
+          "labels": true
+        }
+      ],
+      "data": [],
+      "marks": [
+        {
+          "type": "rect",
+          "from": {"data": "show_meth_uids"},
+          "interactive": true,
+          "encode": {
+            "update": {
+              "y": {"scale": "meth_unit_yscale", "band": 0, "field": "UID"},
+              "fill": {"field": "unit", "scale": "meth_unit_color_scale"},
+              "opacity": {"value": 0.05},
+              "stroke":{"value":"gray"},
+              "width": {"signal": "width"},
+              "tooltips": {"signal": "datum"},
+              "height": {"scale": "meth_unit_yscale", "band": 1}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "name": "__banded_tracks",
+          "from": {"data": "meth_values_vis"},
+          "clip": false,
+          "interactive": true,
+          "encode": {
+            "update": {
+              "x": {"scale": "gdom_scale", "field": "g0"},
+              "x2": {"scale": "gdom_scale", "field": "g1"},
+              "tooltip": {"signal": "datum"},
+              "y2": {"scale": "meth_unit_yscale", "field": "UID", "band": 1},
+              "stroke": {"scale": "meth_gradiantscale", "field": "v0"},
+              "height": { "signal":"bandwidth('meth_unit_yscale')*datum.v0"}
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "style": "cell",
+      "clip": true,
+      "name": "position_track",
+      "encode": {
+        "update": {
+          "height": {"signal": "20"},
+          "width": {"signal": "width"},
+          "stroke": {"value": "transparent"}
+        }
+      },
+      "signals": [
+        {"name": "seq_title", "update": "'seq Title'"},
+        {"name": "seq_subtitle", "update": "'seq Subtitle'"},
+        {"name": "seq_min", "update": "0"},
+        {"name": "seq_max", "update": "1"},
+        {"name": "seq_cats", "update": "['a','t','c','g']"},
+        {"name": "seq_symbol_size", "value": 12},
+        {"name": "seq_palette", "value": "RedYellowBlue"},
+        {
+          "name": "seq_header_height",
+          "update": "if(seq_title=='',0,if(seq_subtitle=='',12,24))"
+        },
+        {"name": "seq_boxes", "value": true},
+        {"name": "seq_columns", "value": true},
+        {"name": "seq_opacity", "value": true},
+        {"name": "seq_gradiant", "value": true},
+        {"name": "seq_points", "value": true},
+        {"name": "seq_values_count", "update": "data('seq_values').length"},
+        {"name": "seq_vis", "update": "if(seq_values_count==0,false,true)"}
+      ],
+      "marks": [
+        {
+          "type": "rect",
+          "from": {"data": "seq_values"},
+          "name": "seq_track",
+          "interactive": true,
+          "encode": {
+            "update": {
+              "x": {"scale": "gdom_scale", "field": "g0"},
+              "x2": {"scale": "gdom_scale", "field": "g1"},
+              "tooltip": {"signal": "datum"},
+              "strokeWidth": {"signal": "if(range<500,1,0)"},
+              "cornerRadius": {"value": 1},
+              "width": {"signal": "width"},
+              "stroke": {"value": "white"},
+              "height": {"value": 20},
+              "fill": {"field": "value", "scale": "seq_color_scale"}
+            }
+          }
+        }
+      ],
+      "axes": [
+        {
+          "scale": "pdom_scale",
+          "orient": "bottom",
+          "grid": true,
+          "zindex": 0,
+          "domain": true,
+          "minExtent": {"value": 50},
+          "offset": 20,
+          "maxExtent": {"value": 5},
+          "tickCount": 3,
+          "encode": {
+            "labels": {
+              "update": {
+                "text": {"signal": "format(datum.value, '.3s')"},
+                "fontSize": {"value": 10},
+                "opacity": {"value": 0.8},
+                "dx": {"value": 0},
+                "dy": {"value": 0}
+              }
+            },
+            "title": {"update": {"fontSize": {"value": 14}}},
+            "domain": {
+              "update": {
+                "stroke": {"value": "#333"},
+                "strokeWidth": {"value": 1}
+              }
+            }
+          }
+        },
+        {
+          "scale": "gdom_scale",
+          "orient": "bottom",
+          "grid": false,
+          "offset": 20,
+          "domain": false,
+          "gridScale": "pvalues_scale",
+          "title": {
+            "signal": "'chr'+chrF+':'+format(floor(pdom[0]), ',')+' - '+'chr' + chrL+':'+format(floor(pdom[1]), ',')+' ('+format(gdom[1]-gdom[0], '.3s')+'bp)'"
+          },
+          "minExtent": {"value": 50},
+          "maxExtent": {"value": 5},
+          "values": [
+            1,
+            250000000,
+            495000000,
+            695000000,
+            890000000,
+            1075000000,
+            1250000000,
+            1412000000,
+            1560000000,
+            1700000000,
+            1835000000,
+            1972000000,
+            2107000000,
+            2223000000,
+            2333000000,
+            2438000000,
+            2533000000,
+            2618000000,
+            2700000000,
+            2760000000,
+            2826000000,
+            2876000000,
+            2928000000,
+            3088000000,
+            3148000000
+          ],
+          "encode": {
+            "labels": {
+              "update": {
+                "text": {"scale": "chr_scale", "signal": "datum.value"},
+                "fontSize": {"value": 10},
+                "align": {"value": "left"},
+                "opacity": {"value": 0.5},
+                "baseline": {"value": "middle"},
+                "dx": {"value": 0},
+                "dy": {"value": 0},
+                "angle": {"value": 90}
+              }
+            },
+            "domain": {
+              "update": {
+                "stroke": {"value": "#333"},
+                "strokeWidth": {"value": 1.5}
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

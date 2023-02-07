@@ -1,6 +1,6 @@
 {
   "name": "rimod-ftd",
-  "version": "0.300",
+  "version": "1.020723",
   "private": false,
   "scripts": {
     "start": "node app.js"

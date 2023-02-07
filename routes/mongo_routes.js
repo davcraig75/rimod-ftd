@@ -9,7 +9,7 @@ itgz = require("../src/lib/lz-string.js");
 var itg_comp = function(file) {return itgz.compressToEncodedURIComponent(fs.readFileSync(file, "utf8"));};
 var itg_engz = function(data) {return itgz.compressToEncodedURIComponent(JSON.stringify(data)).toString();};
 
-
+var max_range_10M = 10000000;
 //////////////////////////////////////////////////////////////////////////////////
 // MongoDB API
 //////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ var db = mongoose.connection;
 var GenePosSchema = mongoose.Schema({chr:String,first_pos:Number,last_pos:Number},{collection: "gene_summary"});   
 var Private_Gene_Schema = mongoose.Schema({chr:String,first_pos:Number,last_pos:Number},{collection: "gene_detail"});   
 var url = 'mongodb://127.0.0.1:'+process.env.MONGODB_PRIVATE_PORT+'/'+process.env.MONGODB_PRIVATE_DB;
-mongoose.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true});
+mongoose.connect(url, { useNewUrlParser: true });
 
 //////////////////////////////////////////////////////////////////////////////////
 // GeneInfo API
@@ -31,7 +31,12 @@ mongoose.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true});
         var startTime = Date.now();
         var range=Math.abs(last_pos-first_pos);
         if(range<max_range_10M) {   
-            GenePosCollection.find({"g38.0": { "$gte": first_pos,"$lte": last_pos },"summaries_BulkRNA":{"$exists":1} }, function(err, pos) {
+            GenePosCollection.find({
+                "$or":[
+                    {"g38.0": { "$gte": first_pos,"$lte": last_pos },"summaries_COUNT":{"$exists":1} },
+                    {"g38.1": { "$gte": first_pos,"$lte": last_pos },"summaries_COUNT":{"$exists":1} }
+                ]
+            }, function(err, pos) {
                 if (err) { console.log ("error");res.json({})}
                 if (pos) {
                     res.json({genepos:encodeURI(itgz.compressToBase64(JSON.stringify(pos)))}); 
@@ -41,22 +46,33 @@ mongoose.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true});
                 res.json([]); 
         }       
     }
-    router.get(process.env.NODE_PRIVATE+'/genePos/first_pos/:first_pos/last_pos/:last_pos',search_genepos); // Public
+    router.get('/genePos/first_pos/:first_pos/last_pos/:last_pos',search_genepos); // Public
 
 
     var Private_Gene_Connection = db.model('gene_detail', Private_Gene_Schema);
     function private_search_gene(req, res) {
         var mygene=req.params.gene;
-        Private_Gene_Connection.findOne({'gene':req.params.gene}, function(err, gene) {
+        Private_Gene_Connection.find({'gene':req.params.gene}, function(err, gene) {
             if (err) { console.log('err'+err)}
-            if (gene) {
-                res.json({gene:encodeURI(itgz.compressToBase64(JSON.stringify(gene)))});
+            if (gene.length>0) {
+                res.json({gene:encodeURI(itgz.compressToBase64(JSON.stringify(gene[0])))});
             } else {
-                res.json({});
+                Private_Gene_Connection.find({'names':req.params.gene}, function(err, gene) {
+                    if (err) { console.log('err'+err)}
+                    if (gene) {
+                        if (gene.length>0) {
+                            res.json({gene:encodeURI(itgz.compressToBase64(JSON.stringify(gene[0])))});
+                        } else {
+                            res.json({gene:encodeURI(itgz.compressToBase64({}))});
+                        }
+                    } else {
+                        res.json({});
+                    }    
+                });                
             }
         });
     }
-    router.get(process.env.NODE_PRIVATE+'/gene/:gene', private_search_gene); 
+    router.get('/gene/:gene', private_search_gene); 
 
 //////////////////////////////////////////////////////////////////////////////////
 // METH
@@ -84,7 +100,7 @@ mongoose.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true});
             });
         } else {res.json([]);}
     }   
-    router.get(process.env.NODE_PRIVATE+'/meth/g0/:g0/g1/:g1',search_METH); // Public
+    router.get('/meth/g0/:g0/g1/:g1',search_METH); // Public
 
     function search_METH_summary(req, res) {
         var g0=Math.round(req.params.g0);var g1=Math.round(req.params.g1);var range=Math.abs(g1-g0);var startTime = Date.now();
@@ -102,7 +118,7 @@ mongoose.connect(url, { useNewUrlParser: true ,useUnifiedTopology: true});
             });
         } else {res.json([]);}
     }   
-    router.get(process.env.NODE_PRIVATE+'/meth_summary/g0/:g0/g1/:g1',search_METH_summary); // Public
+    router.get('/meth_summary/g0/:g0/g1/:g1',search_METH_summary); // Public
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +146,7 @@ function search_CAGE_summary(req, res) {
         });
     } else {res.json([]);}
 }       
-router.get(process.env.NODE_PRIVATE+'/cage_summary/g0/:g0/g1/:g1',search_CAGE_summary); // Public
+router.get('/cage_summary/g0/:g0/g1/:g1',search_CAGE_summary); // Public
 
 function search_CAGE(req, res) {
     var g0=Math.round(req.params.g0);var g1=Math.round(req.params.g1);var range=Math.abs(g1-g0);var startTime = Date.now();
@@ -149,5 +165,5 @@ function search_CAGE(req, res) {
         });
     } else {res.json([])}
 }   
-router.get(process.env.NODE_PRIVATE+'/cage/g0/:g0/g1/:g1',search_CAGE); // Public
+router.get('/cage/g0/:g0/g1/:g1',search_CAGE); // Public
 module.exports = router;

@@ -38,7 +38,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 }); 
-var max_range_10M = 10000000;
+
 
 // Start server
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,13 +62,12 @@ var samples={json:samples_data,columns:samples_data.columns};
         gene_wordcloud:itg_comp("views/json/geneview.wordcloud.042119.v30.json"),
         logos:itg_comp("src/logos.css"),
         samples:itg_engz(samples),
-        genomebrowser:itg_comp("views/json/browser.020921.json"),
+        genomebrowser:itg_comp("views/json/browser.1.020723.json"),
         genes:itg_comp("views/genes.ejs"),     
         browser:itg_comp("views/browser.ejs"),    
         landing:itg_comp("views/home.ejs"), 
         menu:itg_comp("views/menu.ejs"),  
         autocomplete:itg_comp("./src/autocomplete.css"),   
-        rimodcss:itg_comp("./views/styles-rimod.css"),
         rimodcss:itg_comp("./views/styles-rimod.css"),
         jquerycss:itg_comp("src/jquery-ui.css"),
         footer:itg_comp("views/footer.ejs"),
@@ -87,6 +86,7 @@ var samples={json:samples_data,columns:samples_data.columns};
           res.render('body.ejs',  document);
       });
       const priv = require('./routes/mongo_routes.js'); 
+      app.use(process.env.NODE_PRIVATE,priv);
 
 //////////////////////////////////////////////////////////////////////////////////
 // END API  Server
