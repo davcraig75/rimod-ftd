@@ -38,7 +38,7 @@ function render_browser_full(browser) {
             actions: {
                 export: true,
                 source: false,
-                editor: true,
+                editor: itgapp['vega_vals'],
                 scaleFactor: 2
             }
     }).then(function (result) {

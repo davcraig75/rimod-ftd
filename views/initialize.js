@@ -156,7 +156,7 @@ var loadData = function loadData(data) {
     template: {
       type: "custom",
       method: function method(value, item) {
-        return "<a href=#Gene?gene=" + item.gene + ">" + value + "</a>";
+        return "<a href=#Genes?gene=" + item.gene + ">" + value + "</a>";
       }
     },
     theme: "square"

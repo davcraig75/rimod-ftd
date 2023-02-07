@@ -174,7 +174,7 @@ function make_browser(browser, genes) {
                     var gg0=gene.g38[0];
                     var ggend=gg0+Math.max(MinPosSize,Math.abs(gene.g38[1]-gene.g38[0]));
                     if (gene.clusters_summaries_COUNT||gene.summaries_COUNT) { 
-                        for (x=0;x<=6;++x) {
+                        for (x=0;x<=3;++x) {
                             if ( (t+gene.transcripts.length+x) > (tracks.length-1) ) {
                                 tracks[t+gene.transcripts.length+x]=[{'g0':gg0,'g1':ggend}];
                             } else {
