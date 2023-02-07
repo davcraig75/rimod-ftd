@@ -285,14 +285,14 @@ var reformat_gene_description = function reformat_gene_description(genes) {
             jQueryITG('#Gene_other_names').append(genes.Gene_old_names);
         }
 
-        if (genes.transcripts) {
-            jQueryITG("#transcript_list").append(genes.transcripts[0]['transcript']);
-            jQueryITG.each(genes.transcripts, function (i, val) {
-                if (i != 0) {
-                    jQueryITG("#transcript_list").append('<br>' + genes.transcripts[i]['transcript']);
-                }
-            });
-        }
+        //if (genes.transcripts) {
+         //   jQueryITG("#transcript_list").append(genes.transcripts[0]['transcript']);
+          //  jQueryITG.each(genes.transcripts, function (i, val) {
+           //     if (i != 0) {
+            //        jQueryITG("#transcript_list").append('<br>' + genes.transcripts[i]['transcript']);
+             //   }
+            //});
+        //}
     } else {
         genes = [];
         jQueryITG('#results').hide();
@@ -422,7 +422,7 @@ var load_geneInfo = function load_geneInfo(browser) {
                             {"name":"graph_title","value":"Expression of "+mygene},
                             {"name":"Dash_Height","value":0.75},
                             {"name":"Grid_Opacity","value":0.5},
-                            {"name":"Legend_Height","value":75},
+                            {"name":"Legend_Height","value":50},
                             {"name":"Palette","value":"category10"},
                             {"name":"Jitter_Radius","value":5},
                             {"name":"Jitter_","value":true},

@@ -1798,7 +1798,7 @@
               "fill": {"field": "unit", "scale": "cage_unit_color_scale"},
               "opacity": {"value": 0.1},
               "width": {"signal": "width"},
-              "tooltips": {"signal": "{'Group':datum.event,'Expression':datum.v0,'Observations':count}"},
+              "tooltips": {"signal": "{'Group':datum.event,'Expression':datum.v0}"},
               "height": {"scale": "cage_summary_unit_yscale", "band": 1}
             }
           }
@@ -1981,7 +1981,7 @@
               "opacity": {"value": 0.1},
               "stroke":{"value":"gray"},
               "width": {"signal": "width"},
-              "tooltips": {"signal": "{'Group':datum.event,'Expression':datum.v0,'Observations':count}"},
+              "tooltips": {"signal": "{'Group':datum.event,'Expression':datum.v0}"},
               "height": {"scale": "cage_unit_yscale", "band": 1}
             }
           }

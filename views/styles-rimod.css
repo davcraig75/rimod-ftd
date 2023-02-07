@@ -21,7 +21,7 @@
 }
 /* Menu –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .coldark {
-	font-size: 10px;
+	font-size: 12px;
 	line-height: 1em;
 
 }
@@ -168,8 +168,8 @@ hr {
 }
 .itg-half.itg-column {
 	width: 100%;
-	margin-block-start: 1em;
-	margin-block-end: 1em;
+	margin-block-start: 0.5em;
+	margin-block-end: 0.5em;
 	margin-inline-start: 0px;
 	margin-inline-end: 0px;
 }
@@ -180,8 +180,8 @@ hr {
 	}
 	.itg-half.itg-column {
 		width: 48%;
-		margin-block-start: 1em;
-		margin-block-end: 1em;
+		margin-block-start: 0.5em;
+		margin-block-end: 0.5em;
 		margin-inline-start: 0px;
 		margin-inline-end: 0px;
 	}
@@ -337,12 +337,11 @@ hr {
 	box-sizing: border-box;
 	padding: 0 0px;
 	margin: 0 auto;
-	margin-bottom: 1em;
 	box-sizing: border-box;
 	padding: 4px 10px;
 	margin: 0 auto;
 	width: 96%;
-	margin-bottom: 1em;
+	margin-bottom: 0.35em;
 	background: white;
 }
 .itg-row.box {
@@ -403,13 +402,13 @@ ul.itg-ul ul.itg-ul, ul.itg-ul ol.itg-ol, ol.itg-ol ol.itg-ol, ol.itg-ol ul.itg-
 /* H2345 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 h1.itg {
-	font-size: 2.6em;
-	line-height: 2em;
+	font-size: 2.4em;
+	line-height: 1.6em;
 	font-family: "Open Sans", Verdana, Arial, sans-serif;
 	font-weight: 300;
 	color: #1c1f2a;
-	margin-block-start: 0.5em;
-	margin-block-end: 0.5em;
+	margin-block-start: 0.25em;
+	margin-block-end: 0.25em;
 	margin-inline-start: 0px;
 	margin-inline-end: 0px;
 }
@@ -548,10 +547,10 @@ table.itg thead tr th, table.itg tbody tr th {
 table.itg td, table.itg th {
 	border: transparent;
 	text-align: center;
-	padding: 0.25em 0.5em 0.25em 0.5em;
+	padding: 0.1em 0.1em 0.1em 0.1em;
 }
 th {
-	padding: 0.25em 0.5em 0.25em 0.5em;
+	padding: 0.15em 0.15em 0.15em 0.15em;
 }
 table.itg th:nth-child(1) {
 	text-align: center;
