@@ -122,7 +122,7 @@
         }
       ]
     },
-    {"name": "RNAB_clickedFilter"},
+    {"name": "COUNT_clickedFilter"},
     {
       "name": "cage_clickedFilter",
       "value": "Disease",
@@ -167,7 +167,7 @@
     },
     {
       "name": "track_count",
-      "update": "if(rnab_track_minmax[1]>0,rnab_track_minmax[1],if(transcripts_track_minmax[1]>0,transcripts_track_minmax[1],if(genes_track_minmax[1],genes_track_minmax[1],20)))+10"
+      "update": "if(count_track_minmax[1]>0,count_track_minmax[1],if(transcripts_track_minmax[1]>0,transcripts_track_minmax[1],if(genes_track_minmax[1],genes_track_minmax[1],20)))+10"
     },
     {"name": "genome_cell_height", "update": "track_count*12+label_height"},
     {
@@ -451,31 +451,31 @@
     },
     {"name": "gene_anchors", "values": []},
     {
-      "name": "RNAB_summary_values",
+      "name": "COUNT_summary_values",
       "values": [],
       "transform": [
         {"type": "filter", "expr": "show_transcripts"},
         {"type": "filter", "expr": "datum.variable==gene_clickedFilter"},
         {"type": "formula", "as": "g0", "expr": "datum['g0']"},
         {"type": "formula", "as": "v0", "expr": "datum['median']"},
-        {"type": "extent", "field": "v0", "signal": "rnab_minmax"},
+        {"type": "extent", "field": "v0", "signal": "count_minmax"},
         {"type": "formula", "as": "unit", "expr": "datum['event']"}
       ]
     },
     {
-      "name": "RNAB_summary_values_vis",
-      "source": "RNAB_summary_values",
+      "name": "COUNT_summary_values_vis",
+      "source": "COUNT_summary_values",
       "transform": [
         {
           "type": "filter",
           "expr": "(datum.g0 < gdom[1]) & (datum.g0 > gdom[0])"
         },
-        {"type": "extent", "field": "track", "signal": "rnab_track_minmax"}
+        {"type": "extent", "field": "track", "signal": "count_track_minmax"}
       ]
     },
     {
-      "name": "RNAB_summary_unit_domains",
-      "source": "RNAB_summary_values",
+      "name": "COUNT_summary_unit_domains",
+      "source": "COUNT_summary_values",
       "transform": [
         {"type": "filter", "expr": "isDefined(datum.unit)"},
         {"type": "collect", "sort": {"field": "unit"}},
@@ -772,11 +772,11 @@
       "domain": ["Disease", "Sex", "Mutation", "Gene", "Pathology", ""]
     },
     {
-      "name": "rnab_unit_color_scale",
+      "name": "count_unit_color_scale",
       "type": "ordinal",
       "range": {"scheme": "tableau10"},
       "domain": {
-        "data": "RNAB_summary_unit_domains",
+        "data": "COUNT_summary_unit_domains",
         "field": "unit",
         "sort": {"field": "unit"}
       }
@@ -1113,7 +1113,7 @@
           "type": "symbol",
           "direction": "vertical",
           "zindex": 1,
-          "fill": "rnab_unit_color_scale",
+          "fill": "count_unit_color_scale",
           "gridAlign": "each",
           "cornerRadius": 6,
           "padding": 5,
@@ -1369,19 +1369,19 @@
                       "test": "show_transcripts",
                       "field": "track",
                       "scale": "gene_tracks_scale",
-                      "band": 0.4
+                      "band": 0.1
                     },
                     {
                       "field": "genetrack",
                       "scale": "gene_tracks_scale",
-                      "band": 0.4
+                      "band": 0.1
                     }
                   ],
                   "#tooltip": {"signal": "datum"},
                   "tooltip": {
                     "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
                   },
-                  "height": {"band": 0.2, "scale": "gene_tracks_scale"},
+                  "height": {"band": 0.7, "scale": "gene_tracks_scale"},
                   "fill": [
                     {"test": "datum.gene==selected.gene", "value": "firebrick"},
                     {"value": "steelblue"}
@@ -1414,18 +1414,18 @@
                       "test": "show_transcripts",
                       "field": "track",
                       "scale": "gene_tracks_scale",
-                      "band": 0.1
+                      "band": 0.0
                     },
                     {
                       "field": "genetrack",
                       "scale": "gene_tracks_scale",
-                      "band": 0.1
+                      "band": 0.0
                     }
                   ],
                   "tooltip": {
                     "signal": "{'Gene':datum.gene,'Pos':datum.chr+':'+datum.fp+'-'+datum.lp,'Info':datum.exon_id,'transcript':datum.transcript}"
                   },
-                  "height": {"band": 0.8, "scale": "gene_tracks_scale"},
+                  "height": {"band": 1, "scale": "gene_tracks_scale"},
                   "fill": [
                     {"test": "datum.gene==selected.gene", "value": "firebrick"},
                     {"value": "steelblue"}
@@ -1483,7 +1483,7 @@
               "clip": true,
               "from": {
                 "facet": {
-                  "data": "RNAB_summary_values_vis",
+                  "data": "COUNT_summary_values_vis",
                   "name": "myfacet",
                   "groupby": ["track", "g0", "gene"]
                 }
@@ -1550,7 +1550,7 @@
                   "type": "band",
                   "range": [{"signal": "30"}, {"signal": "60"}],
                   "domain": {
-                    "data": "RNAB_summary_unit_domains",
+                    "data": "COUNT_summary_unit_domains",
                     "field": "unit"
                   }
                 },
@@ -1584,7 +1584,7 @@
                       "opacity": {"value": 0.75},
                       "fill": {
                         "field": "unit",
-                        "scale": "rnab_unit_color_scale"
+                        "scale": "count_unit_color_scale"
                       }
                     }
                   }
@@ -1798,7 +1798,7 @@
               "fill": {"field": "unit", "scale": "cage_unit_color_scale"},
               "opacity": {"value": 0.1},
               "width": {"signal": "width"},
-              "tooltips": {"signal": "datum"},
+              "tooltips": {"signal": "{'Group':datum.event,'Expression':datum.v0,'Observations':count}"},
               "height": {"scale": "cage_summary_unit_yscale", "band": 1}
             }
           }
@@ -1981,7 +1981,7 @@
               "opacity": {"value": 0.1},
               "stroke":{"value":"gray"},
               "width": {"signal": "width"},
-              "tooltips": {"signal": "datum"},
+              "tooltips": {"signal": "{'Group':datum.event,'Expression':datum.v0,'Observations':count}"},
               "height": {"scale": "cage_unit_yscale", "band": 1}
             }
           }

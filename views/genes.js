@@ -9,8 +9,7 @@ function make_browser(browser, genes) {
     browser.exons.values.length = 0;
     browser.views.values.length = 0;
     browser.location.values.length = 0; 
-    browser.scrn_summaries.values.length = 0;
-    browser.rnab_summaries.values.length = 0;
+    browser.count_summaries.values.length = 0;
     var WindowSize=browser.search.gwin[1]-browser.search.gwin[0];
     var MinPosSize=Math.round(0.05*WindowSize);
     //console.log('MinPosSize',MinPosSize);
@@ -153,27 +152,18 @@ function make_browser(browser, genes) {
                         }
                     }
                     var s=t+gene.transcripts.length;
-                    if (gene.clusters_summaries) {
-                        for (var n = 0; n < gene.clusters_summaries.length; n++) {
-                            gene.clusters_summaries[n]['Annotation']=cluster_defs[gene.clusters_summaries[n]['cluster']];
-                            gene.clusters_summaries[n]['g0']=gene.g38[0];
-                            gene.clusters_summaries[n]['track']=s;
-                            gene.clusters_summaries[n]['gene']=gene.gene;
-                            browser.scrn_summaries.values.push( gene.clusters_summaries[n]);
-                        }
-                    }
-                    if (gene.summaries_COUNT,gene.summaries_COUNT) {
+                    if (gene.summaries_COUNT) {
                         //console.log('bulk rna summary found');
                         for (var o = 0; o < gene.summaries_COUNT.length; o++) {
                             gene.summaries_COUNT[o]['g0']=gene.g38[0];
                             gene.summaries_COUNT[o].track=s;
                             gene.summaries_COUNT[o]['gene']=gene.gene; 
-                            browser.rnab_summaries.values.push( gene.summaries_COUNT[o]);
+                            browser.count_summaries.values.push( gene.summaries_COUNT[o]);
                         }
                     }
                     var gg0=gene.g38[0];
                     var ggend=gg0+Math.max(MinPosSize,Math.abs(gene.g38[1]-gene.g38[0]));
-                    if (gene.clusters_summaries_COUNT||gene.summaries_COUNT) { 
+                    if (gene.summaries_COUNT) { 
                         for (x=0;x<=3;++x) {
                             if ( (t+gene.transcripts.length+x) > (tracks.length-1) ) {
                                 tracks[t+gene.transcripts.length+x]=[{'g0':gg0,'g1':ggend}];
@@ -224,9 +214,16 @@ var gpos_search=function(result,gene_url) {
             browser.vgSpec.data[browser.vgSpec.data.findIndex(function(a) {return a.name == "cds"})].values=browser.cds.values;
             browser.vgSpec.data[browser.vgSpec.data.findIndex(function(a) {return a.name == "utrs"})].values=browser.utrs.values;
             browser.vgSpec.data[browser.vgSpec.data.findIndex(function(a) {return a.name == "transcripts"})].values=browser.transcripts.values;
-            browser.vgSpec.data[browser.vgSpec.data.findIndex(function(a) {return a.name == "RNAB_summary_values"})].values=browser.rnab_summaries.values;
+            if (browser.count_summaries.values) {
+                if(browser.count_summaries.values.length>0) {
+                    browser.vgSpec.data[browser.vgSpec.data.findIndex(function(a) {return a.name == "COUNT_summary_values"})].values=browser.count_summaries.values;
+                    result.view.change('COUNT_summary_values', vega.changeset().insert(browser.count_summaries.values).remove(function () {return true})).run();
+
+                }
+                
+            }            
             result.view.change('geneDetail', vega.changeset().insert(browser.genes.values).remove(function () {return true})).run();
-            result.view.change('RNAB_summary_values', vega.changeset().insert(browser.rnab_summaries.values).remove(function () {return true})).run();
+            
             result.view.change('exons', vega.changeset().insert(browser.exons.values).remove(function () {return true})).run();
             result.view.change('cds', vega.changeset().insert(browser.cds.values).remove(function () {return true})).run();
             result.view.change('utrs', vega.changeset().insert(browser.utrs.values).remove(function () {return true})).run();
@@ -388,17 +385,20 @@ var load_geneInfo = function load_geneInfo(browser) {
             var Gene_array = reformat_gene_description(data);
             if (Gene_array) {
                 if (Gene_array.genetext) {
+                    if (data.samples_COUNT) {
+                        browser.samples= data.samples_COUNT;
+                        for (var g = 0; g < browser.samples.length; g++) {
+                            if (browser.samples[g]['BulkRNA_v0']) {
+                                browser.samples[g]['RNA Expression']=browser.samples[g]['BulkRNA_v0'];
+                                browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['BulkRNA_Log_v0'];
+                            } else if (browser.samples[g]['SMALLRNA_v0']) {
+                                browser.samples[g]['RNA Expression']=browser.samples[g]['SMALLRNA_v0'];
+                                browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['SMALLRNA_Log_v0'];                            
+                            }                        
+                        };                        
+                    }
                     
-                    browser.samples= data.samples_COUNT;
-                    for (var g = 0; g < browser.samples.length; g++) {
-                        if (browser.samples[g]['BulkRNA_v0']) {
-                            browser.samples[g]['RNA Expression']=browser.samples[g]['BulkRNA_v0'];
-                            browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['BulkRNA_Log_v0'];
-                        } else if (browser.samples[g]['SMALLRNA_v0']) {
-                            browser.samples[g]['RNA Expression']=browser.samples[g]['SMALLRNA_v0'];
-                            browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['SMALLRNA_Log_v0'];                            
-                        }                        
-                    };
+
 
                     render_gene_wordcloud(Gene_array.wordvalues);
                     browser.search.genequery = browser.search.gene;
@@ -407,33 +407,38 @@ var load_geneInfo = function load_geneInfo(browser) {
                       browser.g38=[Gene_array.g38[0],Gene_array.g38[1]];   
                     }
                     var cols=["RNA Expression","RNA Log(Expression)","Age","Sex","Disease","Gene","Mutation","Pathology","Disease-Gene","Min pmd","pH"];
-                    crossex("expgraff",browser.samples,
-                    [
-                        {"editable":itgapp.vega_vals},
-                        {"exportable":true},                        
-                        {"name":"X_Axis","value":"Disease-Gene","bind":{"options":cols}},
-                        {"name":"Y_Axis","value":"RNA Expression","bind":{"options":cols}},
-                        {"name":"Facet_Cols_By","value":"None","bind":{"options":cols}},       
-                        {"name":"Facet_Rows_By","value":"None","bind":{"options":cols}},       
-                        {"name":"Color_By","value":"Disease-Gene","bind":{"options":cols}},    
-                        {"name":"Filter_Out_From","value":"None","bind":{"options":cols}},       
-                        {"name":"Filter_Additional","value":"None","bind":{"options":cols}},     
-                        {"name":"graph_title","value":"Expression of "+mygene},
-                        {"name":"Dash_Height","value":0.75},
-                        {"name":"Grid_Opacity","value":0.5},
-                        {"name":"Legend_Height","value":75},
-                        {"name":"Palette","value":"category10"},
-                        {"name":"Jitter_Radius","value":5},
-                        {"name":"Jitter_","value":true},
-                        {"name":"Max_Point","value":50},
-                        {"name":"Min_Point","value":50},
-                        {"name":"X_Axis_Height","value":120},
-                        {"name":"Row_Height","value":200},
-                        {"name":"Legend_Cols","value":4},
-                        {"name":"Max_Plot_Height","value":200},
-                        {"name":"Dash_Width","value":0.3}
-                    ],"itg-browser-width"
-                  );  
+                    if (browser.samples.length>0) {
+                        crossex("expgraff",browser.samples,
+                        [
+                            {"editable":itgapp.vega_vals},
+                            {"exportable":true},                        
+                            {"name":"X_Axis","value":"Disease-Gene","bind":{"options":cols}},
+                            {"name":"Y_Axis","value":"RNA Expression","bind":{"options":cols}},
+                            {"name":"Facet_Cols_By","value":"None","bind":{"options":cols}},       
+                            {"name":"Facet_Rows_By","value":"None","bind":{"options":cols}},       
+                            {"name":"Color_By","value":"Disease-Gene","bind":{"options":cols}},    
+                            {"name":"Filter_Out_From","value":"None","bind":{"options":cols}},       
+                            {"name":"Filter_Additional","value":"None","bind":{"options":cols}},     
+                            {"name":"graph_title","value":"Expression of "+mygene},
+                            {"name":"Dash_Height","value":0.75},
+                            {"name":"Grid_Opacity","value":0.5},
+                            {"name":"Legend_Height","value":75},
+                            {"name":"Palette","value":"category10"},
+                            {"name":"Jitter_Radius","value":5},
+                            {"name":"Jitter_","value":true},
+                            {"name":"Max_Point","value":50},
+                            {"name":"Min_Point","value":50},
+                            {"name":"X_Axis_Height","value":120},
+                            {"name":"Row_Height","value":200},
+                            {"name":"Legend_Cols","value":4},
+                            {"name":"Max_Plot_Height","value":200},
+                            {"name":"Dash_Width","value":0.3}
+                        ],"itg-browser-width"
+                        );  
+                    } else {
+                        jQueryITG("#expgraff").text("No Data To Report For " +browser.search.gene );
+                    }
+
                        
                     browser.loaded=false;
                     var newgenes=[{gene:data.gene,biotype:data.biotype,chr:data.chr,g38:data.g38,geneid:data.geneid,name:data.name,gpos:data.g38,pos38:data.pos38,t_index:data.t_index,transcripts:data.transcripts}];

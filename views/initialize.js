@@ -43,8 +43,7 @@ var browser = {
     'eqtl': [],
     'samples': [],
     'gene_anchors':{"values":[]},
-    'rnab_summaries':{"values":[]},
-    'scrn_summaries':{"values":[]},
+    'count_summaries':{"values":[]},
     'transcripts': {
         "values": []
     },

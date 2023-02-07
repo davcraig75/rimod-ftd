@@ -1,8 +1,8 @@
 var BrowserSearchWindow=function(browser) {    
-    var range = (browser.g38[1] - browser.g38[0]);
+    var range = (browser.g38[1] - browser.g38[0])+500;
     browser.search.chr =browser.chr.replace("chr", "");
-    browser.search.gwin = [browser.g38[0] - round(range*3),browser.g38[1] + round(range*3)];
-    browser.search.g38 = [browser.g38[0]- round(range*0.3),browser.g38[1]+ round(range*0.3)];
+    browser.search.gwin = [browser.g38[0] - round(range*3)-5000,browser.g38[1] + round(range*3)+5000];
+    browser.search.g38 = [browser.g38[0]- round(range*0.3)-5000,browser.g38[1]+ round(range*0.3)+5000];
     browser.vgSpec.signals[Index(browser.vgSpec.signals, "gdom")].update = "[" + browser.search.g38[0] +"," +round(browser.search.g38[1])+"]";
     browser.vgSpec.signals[Index(browser.vgSpec.signals, "gwin")].update = "[" + browser.search.gwin[0] +"," +round(browser.search.gwin[1])+"]";
     
@@ -38,7 +38,7 @@ function render_browser_full(browser) {
             actions: {
                 export: true,
                 source: false,
-                editor: itgapp['vega_vals'],
+                editor: false,
                 scaleFactor: 2
             }
     }).then(function (result) {
