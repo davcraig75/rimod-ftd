@@ -31,18 +31,29 @@ function make_browser(browser, genes) {
             var biotype=gene.biotype;         
             var chr = gene.chr; 
             chr = chr.replace("chr", "");
-            var geneDir='+';    
+            var geneDir='+'; 
             if ( "transcripts" in gene) {
-                if (gene.transcripts[0]) {
-                    if ("dir" in gene.transcripts[0]) {
-                        geneDir=gene.transcripts[0].dir;
-                    }                  
+                if (gene.transcripts) {
+                    if (gene.transcripts[0]) {
+                        gene.transcripts.sort((a, b) => parseFloat(b.g38[0]) - parseFloat(a.g38[0]));
+                        if ("dir" in gene.transcripts[0]) {
+                            geneDir=gene.transcripts[0].dir;
+                        }                  
+                    }
                 }
+
             } else {                
-                //console.log('No transcripts in', gene.gene);
                 break;
             }                            
-            gene.transcripts.sort((a, b) => parseFloat(b.g38[0]) - parseFloat(a.g38[0]));
+            if (gene.transcripts == null) {
+                console.log('here');
+                gene.transcripts=[{
+                    'g38':[gene.g38[0],gene.g38[1]],
+                    'transcript_type':'NA',
+                    'transcript_name':'gene',
+                    'pos38':[gene.p0,gene.p1]
+                }]
+            }
             var inserted=false;
             for (t=0;t<tracks.length;++t) {
                 var InsertGene=true;
@@ -51,17 +62,19 @@ function make_browser(browser, genes) {
                         InsertGene=false;                        
                     }                                        
                 }
-                for (var zz=t;zz<=t+gene.transcripts.length+6;++zz) {
-                    if (zz<tracks.length) {
-                        for (var jz=0;jz<tracks[zz].length;++jz) {
-                            if (gene.g38[0]>tracks[zz][jz].g0 && gene.g38[0]<tracks[zz][jz].g1) { 
-                                InsertGene=false;                        
-                            }                                        
-                        }
-                    } else {
-                        break;
-                    }                                                    
-                }                   
+                if (gene.transcripts) {
+                    for (var zz=t;zz<=t+gene.transcripts.length+6;++zz) {
+                        if (zz<tracks.length) {
+                            for (var jz=0;jz<tracks[zz].length;++jz) {
+                                if (gene.g38[0]>tracks[zz][jz].g0 && gene.g38[0]<tracks[zz][jz].g1) { 
+                                    InsertGene=false;                        
+                                }                                        
+                            }
+                        } else {
+                            break;
+                        }                                                    
+                    }   
+                }                
                 if (!InsertGene && t==tracks.length-1) {
                     tracks.push([{'g0':0,'g1':0}]);
                 }
@@ -373,15 +386,18 @@ var load_geneInfo = function load_geneInfo(browser) {
         'crossDomain': true,
         'url': gene_api_url,
         beforeSend: function beforeSend() {loader(1,'geneInfo ajax start');},
-        error: function error(xhr) {},
+        error: function error(xhr) {
+            jQueryITG("#expgraff").text("No Match in Database For " +browser.search.gene);
+            jQueryITG("#gene_info").hide();
+        },
         complete: function complete() {loader(0,'geneinfo ajax end');},          
         "method": "GET",
         // "headers": browser.header,                                
         'dataType': "json",       
         'success': function success(data) {
+            console.log('test')
             loader(1,'geneInfo just got data');
             data = JSON.parse(itgz.decompressFromBase64(decodeURI(data.gene))); 
-
             var Gene_array = reformat_gene_description(data);
             if (Gene_array) {
                 if (Gene_array.genetext) {
@@ -389,10 +405,10 @@ var load_geneInfo = function load_geneInfo(browser) {
                         browser.samples= data.samples_COUNT;
                         for (var g = 0; g < browser.samples.length; g++) {
                             if (browser.samples[g]['BulkRNA_v0']) {
-                                browser.samples[g]['RNA Expression']=browser.samples[g]['BulkRNA_v0'];
+                                browser.samples[g]['RNA Expression (VST)']=browser.samples[g]['BulkRNA_v0'];
                                 browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['BulkRNA_Log_v0'];
                             } else if (browser.samples[g]['SMALLRNA_v0']) {
-                                browser.samples[g]['RNA Expression']=browser.samples[g]['SMALLRNA_v0'];
+                                browser.samples[g]['RNA Expression (VST)']=browser.samples[g]['SMALLRNA_v0'];
                                 browser.samples[g]['RNA Log(Expression)']=browser.samples[g]['SMALLRNA_Log_v0'];                            
                             }                        
                         };                        
@@ -406,14 +422,14 @@ var load_geneInfo = function load_geneInfo(browser) {
                     if ('g38' in Gene_array) {
                       browser.g38=[Gene_array.g38[0],Gene_array.g38[1]];   
                     }
-                    var cols=["RNA Expression","RNA Log(Expression)","Age","Sex","Disease","Gene","Mutation","Pathology","Disease-Gene","Min pmd","pH"];
+                    var cols=["RNA Expression (VST)","RNA Log(Expression)","Age","Sex","Disease","Gene","Mutation","Pathology","Disease-Gene","Min pmd","pH"];
                     if (browser.samples.length>0) {
                         crossex("expgraff",browser.samples,
                         [
                             {"editable":itgapp.vega_vals},
                             {"exportable":true},                        
                             {"name":"X_Axis","value":"Disease-Gene","bind":{"options":cols}},
-                            {"name":"Y_Axis","value":"RNA Expression","bind":{"options":cols}},
+                            {"name":"Y_Axis","value":"RNA Expression (VST)","bind":{"options":cols}},
                             {"name":"Facet_Cols_By","value":"None","bind":{"options":cols}},       
                             {"name":"Facet_Rows_By","value":"None","bind":{"options":cols}},       
                             {"name":"Color_By","value":"Disease-Gene","bind":{"options":cols}},    
@@ -435,8 +451,13 @@ var load_geneInfo = function load_geneInfo(browser) {
                             {"name":"Dash_Width","value":0.3}
                         ],"itg-browser-width"
                         );  
-                    } else {
-                        jQueryITG("#expgraff").text("No Data To Report For " +browser.search.gene );
+                    } else {                        
+                        if(browser.search.gene.indexOf("MIR") >= 0 ||browser.search.gene.indexOf("HSA") >= 0 ) {
+                            jQueryITG("#expgraff").text("No Data To Report For " +browser.search.gene + ". You might check "+ browser.search.gene + "-5P or " + browser.search.gene + "-3P" );
+                        } else {
+                            jQueryITG("#expgraff").text("No Data To Report For " +browser.search.gene + ".");
+                        }
+                        
                     }
 
                        
@@ -448,6 +469,8 @@ var load_geneInfo = function load_geneInfo(browser) {
                     jQueryITG("#gene").val(browser.search.gene);
                     
                 }
+            } else {
+                
             }
             loader(0,'done with just got data');
         }

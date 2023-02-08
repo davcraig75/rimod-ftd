@@ -63,10 +63,10 @@ mongoose.connect(url, { useNewUrlParser: true });
                         if (gene.length>0) {
                             res.json({gene:encodeURI(itgz.compressToBase64(JSON.stringify(gene[0])))});
                         } else {
-                            res.json({gene:encodeURI(itgz.compressToBase64({}))});
+                            res.json();
                         }
                     } else {
-                        res.json({});
+                        res.json();
                     }    
                 });                
             }

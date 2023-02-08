@@ -184,10 +184,10 @@
     },
     {
       "name": "meth_height",
-      "update": "if(meth_vis,100,0)",
+      "update": "if(meth_vis,150,0)",
       "on": [{"events": "@Hide_METH_Button:click", "update": "false"}]
     },
-    {"name": "meth_ind_height", "update": "if(meth_show_individual,400,0)"},
+    {"name": "meth_ind_height", "update": "if(meth_show_individual,500,0)"},
     {
       "name": "meth_clickedFilter",
       "value": "Disease",
@@ -204,8 +204,8 @@
       "update": "if(data('cage_summary_values').length>0,true,false)",
       "on": [{"events": "@Hide_CAGE_Button:click", "update": "false"}]
     },
-    {"name": "cage_height", "update": "if(cage_vis,100,0)"},
-    {"name": "cage_ind_height", "update": "if(cage_show_individual,400,0)"},
+    {"name": "cage_height", "update": "if(cage_vis,150,0)"},
+    {"name": "cage_ind_height", "update": "if(cage_show_individual,500,0)"},
     {
       "name": "unit",
       "value": {},
@@ -1997,9 +1997,9 @@
               "x": {"scale": "gdom_scale", "field": "g0"},
               "x2": {"scale": "gdom_scale", "field": "g1"},
               "tooltip": {"signal": "datum"},
-              "opacity":{"value":0.8},
+              "opacity":{"value":0.5},
               "y2": {"scale": "cage_unit_yscale", "field": "UID", "band": 1},
-               "height": { "signal":"bandwidth('cage_unit_yscale')/2*datum.v0/cage_summary_maxmin[1]"},
+               "height": { "signal":"bandwidth('cage_unit_yscale')/4*datum.v0/cage_summary_maxmin[1]"},
               "fill": {"field": "unit", "scale": "cage_unit_color_scale"}
             }
           }

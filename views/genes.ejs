@@ -62,10 +62,15 @@
 <div class="accd jsa">
 	<div class="accd_item jsa-item active" id="rna_expression">
 		<div class="accd-header jsa-header">
-			<h3 class="itg">RNA Expression</h3>
+			<h3 class="itg">RNA Expression By Transcript/Gene</h3>
 		</div>
 		<div class="accd-body jsa-body itg-container">
 			<div class="itg itg-graph" id="expgraff"></div>
+			<div class="itg-container"> 
+				<div class="itg-inlay" style="padding: 0em;"> 
+					<p class="itg" style="line-height: 1.4em;margin-block-start: 0em;margin-block-end: 0em;margin-bottom:0;margin-top:0;font-style:italic;font-size: smaller;color: #778a8b;padding-left:1em;padding-right:1em">Expression values from either RNA-seq or smRNA-seq have been DESeq2-normalized (library size) and varianze-stabilized (VST). These values provide an overview of relative abundance, and formal differential expression analysis (such as through DESEQ) is required for statistical assessement.  Values can be extracted above using the download button, and graphs can be configured to show different comparisons.</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

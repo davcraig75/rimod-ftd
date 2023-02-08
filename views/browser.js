@@ -38,7 +38,7 @@ function render_browser_full(browser) {
             actions: {
                 export: true,
                 source: false,
-                editor: false,
+                editor: true,
                 scaleFactor: 2
             }
     }).then(function (result) {
@@ -47,6 +47,8 @@ function render_browser_full(browser) {
         browser.lastCall = 0;
         pulls(result,browser);
         result.view.addSignalListener('trigger_load', function (name, value) {
+            const canvas = document.querySelector("#foundinpd_browser_window > div > canvas");
+            const ctx = canvas.getContext("2d", {willReadFrequently: true});
 
             var m=value.match(/\"res\":\"(.*)\"/);
 
@@ -82,11 +84,9 @@ function render_browser_full(browser) {
                     if (/Show/i.test(value.v)) {
                         result.view.signal('cage_show_individual',true);
                         insert_API(result,'cage_values',browser.global_api + '/cage/g0/' + browser.search.gwin[0]+ '/g1/' + browser.search.gwin[1]);
-                        insert_API(result,'atac_bed_values',browser.global_api + '/atac_bed/g0/' + browser.search.gwin[0]+ '/g1/' + browser.search.gwin[1]);
                     } else if (/Hide/i.test(value.v)) {
                         result.view.signal('cage_show_individual',false);            
                         insert_API(result,'cage_values',browser.global_api + '/cage/g0/0/g1/0');
-                        insert_API(result,'atac_bed_values',browser.global_api + '/atac_bed/g0/0/g1/0');
                     }
                 }               
             }
