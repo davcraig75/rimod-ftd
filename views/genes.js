@@ -333,12 +333,6 @@ var reformat_gene_description = function reformat_gene_description(genes) {
     wordvalues = wordvalues.replace(/[^A-Za-z]/g, ' ');
     genes.wordvalues = wordvalues; 
 
-    if (wordvalues.match(/parkinson/i)) {
-     //  jQueryITG('#show_diseaseInsert').css('display', 'inline-block');
-    } else {
-        jQueryITG('#show_diseaseInsert').css('display', 'none');
-    }
-
     return genes;
 };
 
@@ -462,12 +456,17 @@ var load_geneInfo = function load_geneInfo(browser) {
 
                        
                     browser.loaded=false;
-                    var newgenes=[{gene:data.gene,biotype:data.biotype,chr:data.chr,g38:data.g38,geneid:data.geneid,name:data.name,gpos:data.g38,pos38:data.pos38,t_index:data.t_index,transcripts:data.transcripts}];
-                    browser=make_browser(browser,newgenes);                    
-                    render_browser_full(browser);
-                    jQueryITG("#Browser").show();
-                    jQueryITG("#gene").val(browser.search.gene);
-                    
+                    if(browser.g38[0]>0) {
+                        var newgenes=[{gene:data.gene,biotype:data.biotype,chr:data.chr,g38:data.g38,geneid:data.geneid,name:data.name,gpos:data.g38,pos38:data.pos38,t_index:data.t_index,transcripts:data.transcripts}];
+                        browser=make_browser(browser,newgenes);                    
+                        render_browser_full(browser);
+                        jQueryITG("#Browser").show();
+
+                    } else {
+                        jQueryITG("#gene_info").hide();
+                        jQueryITG("#Browser").hide();
+                    }                    
+                    jQueryITG("#gene").val(browser.search.gene);                    
                 }
             } else {
                 
